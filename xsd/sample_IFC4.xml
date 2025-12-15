@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ifcXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ifc="http://www.buildingsmart-tech.org/ifcXML/IFC4/final"
+        xmlns="http://www.buildingsmart-tech.org/ifcXML/IFC4/final"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xsi:schemaLocation="http://www.buildingsmart-tech.org/ifcXML/IFC4/final ifcXML4.xsd">
+  
+  <header>
+    <name>Sample IFC4 Project</name>
+    <time_stamp>2024-12-14T16:45:00</time_stamp>
+    <author>Archiparse Generator</author>
+    <organization>Archiparse Development Team</organization>
+    <preprocessor_version>1.0.0</preprocessor_version>
+    <originating_system>Archiparse Sample Generator</originating_system>
+    <authorization>Sample</authorization>
+    <documentation>Sample IFC4 XML file generated for testing purposes</documentation>
+  </header>
+  
+  <!-- Organization -->
+  <ifc:IfcOrganization id="i1" Identification="ORG-001" Name="Modern Architecture Studio" Description="Leading architectural firm"/>
+  
+  <!-- Application -->
+  <ifc:IfcApplication id="i2" Version="1.0.0" ApplicationFullName="Archiparse Sample Generator" ApplicationIdentifier="ARCHIPARSE-001">
+    <ifc:ApplicationDeveloper>
+      <ifc:IfcOrganization ref="i1"/>
+    </ifc:ApplicationDeveloper>
+  </ifc:IfcApplication>
+  
+  <!-- Person -->
+  <ifc:IfcPerson id="i3" Identification="P001" FamilyName="Martin" GivenName="Sophie"/>
+  
+  <!-- Person and Organization -->
+  <ifc:IfcPersonAndOrganization id="i4">
+    <ifc:ThePerson>
+      <ifc:IfcPerson ref="i3"/>
+    </ifc:ThePerson>
+    <ifc:TheOrganization>
+      <ifc:IfcOrganization ref="i1"/>
+    </ifc:TheOrganization>
+  </ifc:IfcPersonAndOrganization>
+  
+  <!-- Owner History -->
+  <ifc:IfcOwnerHistory id="i5" State="readwrite" ChangeAction="added" LastModifiedDate="1734194700" CreationDate="1734194700">
+    <ifc:OwningUser>
+      <ifc:IfcPersonAndOrganization ref="i4"/>
+    </ifc:OwningUser>
+    <ifc:OwningApplication>
+      <ifc:IfcApplication ref="i2"/>
+    </ifc:OwningApplication>
+  </ifc:IfcOwnerHistory>
+  
+  <!-- Cartesian Point -->
+  <ifc:IfcCartesianPoint id="i6" Coordinates="0.0 0.0 0.0"/>
+  
+  <!-- Direction -->
+  <ifc:IfcDirection id="i7" DirectionRatios="0.0 0.0 1.0"/>
+  
+  <ifc:IfcDirection id="i8" DirectionRatios="1.0 0.0 0.0"/>
+  
+  <!-- Axis2Placement3D -->
+  <ifc:IfcAxis2Placement3D id="i9">
+    <ifc:Location>
+      <ifc:IfcCartesianPoint ref="i6"/>
+    </ifc:Location>
+    <ifc:Axis>
+      <ifc:IfcDirection ref="i7"/>
+    </ifc:Axis>
+    <ifc:RefDirection>
+      <ifc:IfcDirection ref="i8"/>
+    </ifc:RefDirection>
+  </ifc:IfcAxis2Placement3D>
+  
+  <!-- Geometric Representation Context -->
+  <ifc:IfcGeometricRepresentationContext id="i10" ContextIdentifier="Model" ContextType="Model" CoordinateSpaceDimension="3" Precision="0.0001">
+    <ifc:WorldCoordinateSystem>
+      <ifc:IfcAxis2Placement3D ref="i9"/>
+    </ifc:WorldCoordinateSystem>
+  </ifc:IfcGeometricRepresentationContext>
+  
+  <!-- Dimensional Exponents -->
+  <ifc:IfcDimensionalExponents id="i11" LengthExponent="1" MassExponent="0" TimeExponent="0" ElectricCurrentExponent="0" ThermodynamicTemperatureExponent="0" AmountOfSubstanceExponent="0" LuminousIntensityExponent="0"/>
+  
+  <ifc:IfcDimensionalExponents id="i12" LengthExponent="0" MassExponent="0" TimeExponent="0" ElectricCurrentExponent="0" ThermodynamicTemperatureExponent="0" AmountOfSubstanceExponent="0" LuminousIntensityExponent="0"/>
+  
+  <!-- SI Unit -->
+  <ifc:IfcSIUnit id="i13" Name="metre" Prefix="milli" UnitType="lengthunit">
+    <ifc:Dimensions>
+      <ifc:IfcDimensionalExponents ref="i11"/>
+    </ifc:Dimensions>
+  </ifc:IfcSIUnit>
+  
+  <ifc:IfcSIUnit id="i14" Name="radian" UnitType="planeangleunit">
+    <ifc:Dimensions>
+      <ifc:IfcDimensionalExponents ref="i12"/>
+    </ifc:Dimensions>
+  </ifc:IfcSIUnit>
+  
+  <!-- Unit Assignment -->
+  <ifc:IfcUnitAssignment id="i15">
+    <ifc:Units ifc:itemType="ifc:IfcNamedUnit" ifc:cType="set">
+      <ifc:IfcSIUnit ref="i13"/>
+      <ifc:IfcSIUnit ref="i14"/>
+    </ifc:Units>
+  </ifc:IfcUnitAssignment>
+  
+  <!-- Project -->
+  <ifc:IfcProject id="i16" GlobalId="3qK8x9Y2mN5pR7sT1uV3" Name="Residential Complex Alpha" Description="Modern residential building" LongName="Residential Complex Alpha - Phase 1" Phase="DESIGN" ObjectType="Project">
+    <ifc:OwnerHistory>
+      <ifc:IfcOwnerHistory ref="i5"/>
+    </ifc:OwnerHistory>
+    <ifc:RepresentationContexts ifc:itemType="ifc:IfcRepresentationContext" ifc:cType="set">
+      <ifc:IfcGeometricRepresentationContext ref="i10"/>
+    </ifc:RepresentationContexts>
+    <ifc:UnitsInContext>
+      <ifc:IfcUnitAssignment ref="i15"/>
+    </ifc:UnitsInContext>
+  </ifc:IfcProject>
+  
+  <!-- Site -->
+  <ifc:IfcSite id="i17" GlobalId="2mN4pQ6rS8tU0vW2xY4z" Name="Main Site" Description="Primary construction site" ObjectType="Construction Site">
+    <ifc:OwnerHistory>
+      <ifc:IfcOwnerHistory ref="i5"/>
+    </ifc:OwnerHistory>
+  </ifc:IfcSite>
+  
+  <!-- Building -->
+  <ifc:IfcBuilding id="i18" GlobalId="4rS6tU8vW0xY2zA4bC6d" Name="Main Building" Description="Primary residential building" ObjectType="Residential Building" ElevationOfRefHeight="0.0" ElevationOfTerrain="0.0">
+    <ifc:OwnerHistory>
+      <ifc:IfcOwnerHistory ref="i5"/>
+    </ifc:OwnerHistory>
+  </ifc:IfcBuilding>
+  
+  <!-- Relationship: Project contains Site -->
+  <ifc:IfcRelAggregates id="i19" GlobalId="5tU7vW9xY1zA3bC5dE7f" Name="Project-Site Relationship" Description="Project contains Site">
+    <ifc:OwnerHistory>
+      <ifc:IfcOwnerHistory ref="i5"/>
+    </ifc:OwnerHistory>
+    <ifc:RelatingObject>
+      <ifc:IfcProject ref="i16"/>
+    </ifc:RelatingObject>
+    <ifc:RelatedObjects ifc:itemType="ifc:IfcObjectDefinition" ifc:cType="set">
+      <ifc:IfcSite ref="i17"/>
+    </ifc:RelatedObjects>
+  </ifc:IfcRelAggregates>
+  
+  <!-- Relationship: Site contains Building -->
+  <ifc:IfcRelAggregates id="i20" GlobalId="6vW8xY0zA2bC4dE6fG8" Name="Site-Building Relationship" Description="Site contains Building">
+    <ifc:OwnerHistory>
+      <ifc:IfcOwnerHistory ref="i5"/>
+    </ifc:OwnerHistory>
+    <ifc:RelatingObject>
+      <ifc:IfcSite ref="i17"/>
+    </ifc:RelatingObject>
+    <ifc:RelatedObjects ifc:itemType="ifc:IfcObjectDefinition" ifc:cType="set">
+      <ifc:IfcBuilding ref="i18"/>
+    </ifc:RelatedObjects>
+  </ifc:IfcRelAggregates>
+  
+</ifcXML>

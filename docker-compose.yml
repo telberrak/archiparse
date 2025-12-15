@@ -1,0 +1,120 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: archiparse_postgres
+    environment:
+      POSTGRES_DB: archiparse
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-Eagle1978}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - archiparse_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: archiparse_redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - archiparse_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: archiparse_backend
+    environment:
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-Eagle1978}@postgres:5432/archiparse
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY: ${SECRET_KEY:-change-this-in-production}
+      DEBUG: ${DEBUG:-False}
+      CORS_ORIGINS: ${CORS_ORIGINS:-["http://localhost:3000","http://frontend:3000"]}
+      UPLOAD_DIR: /app/uploads
+      XSD_DIR: /app/xsd
+    volumes:
+      - ./backend:/app
+      - uploads_data:/app/uploads
+      - ./xsd:/app/xsd:ro
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: >
+      sh -c "
+        echo 'Attente de PostgreSQL...' &&
+        until pg_isready -h postgres -U postgres; do sleep 1; done &&
+        echo 'PostgreSQL prêt!' &&
+        alembic upgrade head &&
+        echo 'Migrations appliquées' &&
+        python -c \"import psycopg2; conn = psycopg2.connect('postgresql://postgres:${POSTGRES_PASSWORD:-Eagle1978}@postgres:5432/archiparse'); cur = conn.cursor(); sql = open('/app/migrations/001_enable_rls.sql', 'r').read(); cur.execute(sql); conn.commit(); print('RLS activé'); conn.close()\" 2>/dev/null || echo 'RLS déjà activé ou script non trouvé' &&
+        uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 2
+      "
+    networks:
+      - archiparse_network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: archiparse_frontend
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://backend:8000}
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - archiparse_network
+    restart: unless-stopped
+
+  # Celery Worker (désactivé - Celery n'est pas installé pour l'instant)
+  # Le traitement se fait directement via process_job dans le backend
+  # celery-worker:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   container_name: archiparse_celery
+  #   environment:
+  #     DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-Eagle1978}@postgres:5432/archiparse
+  #     REDIS_URL: redis://redis:6379/0
+  #   volumes:
+  #     - ./backend:/app
+  #     - uploads_data:/app/uploads
+  #   depends_on:
+  #     - postgres
+  #     - redis
+  #   command: celery -A app.workers.celery_app worker --loglevel=info
+  #   networks:
+  #     - archiparse_network
+  #   restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  uploads_data:
+    driver: local
+
+networks:
+  archiparse_network:
+    driver: bridge
+

@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Blue Theme - Light Mode */
+  --background: 0 0% 100%;
+  --foreground: 222 47% 11%;
+  --primary: 217 91% 60%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 214 32% 91%;
+  --secondary-foreground: 222 47% 11%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  --accent: 217 91% 60%;
+  --accent-foreground: 0 0% 100%;
+  --border: 214 32% 91%;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Blue Theme - Dark Mode */
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 11%;
+    --secondary: 217 33% 18%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 18%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 91% 60%;
+    --accent-foreground: 222 47% 11%;
+    --border: 217 33% 18%;
+  }
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  color: hsl(var(--foreground));
+  background: hsl(var(--background));
+}
+
+/* Blue theme enhancements */
+.bg-gradient-blue {
+  background: linear-gradient(135deg, hsl(217, 91%, 60%) 0%, hsl(217, 91%, 50%) 100%);
+}
+
+.text-primary-blue {
+  color: hsl(217, 91%, 60%);
+}
+
+.border-primary-blue {
+  border-color: hsl(217, 91%, 60%);
+}
+
+/* Smooth transitions for theme colors */
+a, button {
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+
+
+

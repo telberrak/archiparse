@@ -1,0 +1,24 @@
+# Dockerfile pour le développement frontend (avec hot-reload)
+
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Copier les fichiers de dépendances
+COPY package.json package-lock.json* ./
+
+# Installer les dépendances
+RUN npm ci
+
+# Copier le reste du code
+COPY . .
+
+EXPOSE 3000
+
+# Démarrer en mode développement
+CMD ["npm", "run", "dev"]
+
+
+
+
+
