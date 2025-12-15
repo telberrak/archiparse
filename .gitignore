@@ -24,6 +24,10 @@ env/
 ENV/
 .venv
 
+# Allow frontend application lib directory (Next.js code)
+!frontend/lib/
+!frontend/lib/**
+
 # Node
 node_modules/
 .next/
