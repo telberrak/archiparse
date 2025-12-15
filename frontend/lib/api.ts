@@ -6,7 +6,14 @@
 
 import axios, { AxiosInstance, AxiosError } from 'axios';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+// Détermination de l'URL de base de l'API
+// - En développement (npm run dev): backend sur localhost:8000
+// - En production (Docker): backend accessible via le service Docker "backend"
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (process.env.NODE_ENV === 'production'
+    ? 'http://backend:8000'
+    : 'http://localhost:8000');
 
 // Créer une instance axios configurée
 const apiClient: AxiosInstance = axios.create({
