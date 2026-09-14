@@ -1,7 +1,7 @@
 """
 Modèles de base de données SQLAlchemy
 
-Correspond au schéma défini dans DATABASE_SCHEMA.md
+Correspond au schéma défini dans docs/DATABASE_SCHEMA.md
 """
 
 from sqlalchemy import Column, String, Text, BigInteger, Boolean, ForeignKey, Numeric, UniqueConstraint, LargeBinary
