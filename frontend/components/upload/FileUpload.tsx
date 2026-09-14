@@ -2,10 +2,13 @@
 
 import { useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { Upload, File, X, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import Link from 'next/link';
+import { Upload, File, X, CheckCircle, AlertCircle, Loader2, FolderKanban } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Progress } from '../ui/progress';
+import { Select } from '../ui/select';
 import { api } from '@/lib/api';
+import { useProjects } from '@/lib/hooks/useProjects';
 
 const MAX_FILE_SIZE = 500 * 1024 * 1024; // 500MB
 const ALLOWED_EXTENSIONS = ['.ifcxml', '.xml'];
@@ -18,6 +21,8 @@ interface ValidationError {
 export function FileUpload() {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { data: projects, isLoading: projectsLoading } = useProjects();
+  const [projectId, setProjectId] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -25,6 +30,12 @@ export function FileUpload() {
   const [validationError, setValidationError] = useState<ValidationError | null>(null);
   const [dragActive, setDragActive] = useState(false);
   const [preview, setPreview] = useState<{ name: string; size: number; type: string } | null>(null);
+
+  const projectsByClient = (projects || []).reduce<Record<string, typeof projects>>((acc, p) => {
+    const key = p.client_name || 'Sans client';
+    (acc[key] ||= []).push(p);
+    return acc;
+  }, {});
 
   const validateFile = useCallback((file: File): ValidationError | null => {
     // Vérifier l'extension
@@ -121,7 +132,7 @@ export function FileUpload() {
   };
 
   const handleUpload = async () => {
-    if (!file) return;
+    if (!file || !projectId) return;
 
     setUploading(true);
     setError(null);
@@ -151,7 +162,7 @@ export function FileUpload() {
         });
       }, 200);
 
-      const response = await api.uploadFile(file);
+      const response = await api.uploadFile(file, projectId);
       
       clearInterval(progressInterval);
       setUploadProgress(100);
@@ -161,7 +172,7 @@ export function FileUpload() {
         router.push(`/jobs/${response.job_id}`);
       }, 500);
     } catch (err: any) {
-      setError(err.message || "Erreur lors de l'upload");
+      setError(err.message || "Erreur lors du téléversement");
       setUploadProgress(0);
     } finally {
       setUploading(false);
@@ -185,8 +196,46 @@ export function FileUpload() {
     return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
   };
 
+  if (projectsLoading) {
+    return (
+      <div className="max-w-2xl mx-auto">
+        <div className="h-12 bg-muted rounded animate-pulse" />
+      </div>
+    );
+  }
+
+  if (!projects || projects.length === 0) {
+    return (
+      <div className="max-w-2xl mx-auto text-center py-12 border border-dashed border-border rounded-lg">
+        <FolderKanban className="w-10 h-10 mx-auto mb-4 text-muted-foreground" />
+        <p className="text-muted-foreground mb-4">
+          Vous devez d'abord créer un projet avant de pouvoir importer un fichier.
+        </p>
+        <Link href="/projects">
+          <Button variant="outline">Créer un projet</Button>
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-2xl mx-auto space-y-4">
+      <div>
+        <label className="block text-sm font-medium text-foreground mb-1.5">Projet</label>
+        <Select value={projectId} onChange={(e) => setProjectId(e.target.value)} disabled={uploading}>
+          <option value="">Choisir un projet…</option>
+          {Object.entries(projectsByClient).map(([clientName, clientProjects]) => (
+            <optgroup key={clientName} label={clientName}>
+              {(clientProjects || []).map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+            </optgroup>
+          ))}
+        </Select>
+      </div>
+
       <div
         className={`border-2 border-dashed rounded-lg p-12 text-center transition-all ${
           dragActive
@@ -233,7 +282,7 @@ export function FileUpload() {
                   <p className="font-medium">{file.name}</p>
                   <Progress value={uploadProgress} showLabel={true} />
                   <p className="text-sm text-muted-foreground">
-                    Upload en cours... {uploadProgress}%
+                    Téléversement en cours... {uploadProgress}%
                   </p>
                 </div>
               </>
@@ -261,9 +310,9 @@ export function FileUpload() {
                     <X className="w-4 h-4 mr-2" />
                     Retirer
                   </Button>
-                  <Button onClick={handleUpload} disabled={uploading}>
+                  <Button onClick={handleUpload} disabled={uploading || !projectId}>
                     <Upload className="w-4 h-4 mr-2" />
-                    Uploader
+                    Téléverser
                   </Button>
                 </div>
               </>
@@ -297,7 +346,7 @@ export function FileUpload() {
           <ul className="list-disc list-inside space-y-1">
             <li>Assurez-vous que le fichier est au format IFCXML valide</li>
             <li>La taille maximale est de {formatFileSize(MAX_FILE_SIZE)}</li>
-            <li>Le fichier sera validé automatiquement après l'upload</li>
+            <li>Le fichier sera validé automatiquement après le téléversement</li>
           </ul>
         </div>
       )}

@@ -51,7 +51,7 @@ CREATE INDEX idx_jobs_tenant_status ON jobs(tenant_id, status);
 ```
 
 ### 3. `models`
-Métadonnées du modèle IFC parsé et JSON normalisé.
+Métadonnées du modèle IFC parsé.
 
 ```sql
 CREATE TABLE models (
@@ -61,7 +61,6 @@ CREATE TABLE models (
     name VARCHAR(500),
     description TEXT,
     project_guid UUID, -- GUID du Projet racine
-    normalized_json JSONB, -- JSON transformé par XSLT
     statistics JSONB, -- Compteurs: éléments, espaces, relations, etc.
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -70,7 +69,6 @@ CREATE TABLE models (
 CREATE INDEX idx_models_job_id ON models(job_id);
 CREATE INDEX idx_models_tenant_id ON models(tenant_id);
 CREATE INDEX idx_models_project_guid ON models(project_guid);
-CREATE INDEX idx_models_normalized_json ON models USING GIN(normalized_json);
 ```
 
 ### 4. `elements`
@@ -198,8 +196,7 @@ CREATE INDEX idx_storeys_building_id ON storeys(building_id);
 - Index GUID pour recherches d'entités IFC
 
 ### Index JSONB
-- Index GIN sur colonnes JSONB pour recherches de propriétés/quantités
-- JSON normalisé indexé pour capacités de recherche plein texte
+- Index GIN sur colonnes JSONB `properties`/`quantities` des éléments pour recherches de propriétés/quantités
 
 ### Index Composés
 - `(tenant_id, status)` sur jobs pour listes de tâches par locataire

@@ -3,7 +3,7 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { api, ElementListResponse, ElementDetail } from '../api';
+import { api, ElementListResponse } from '../api';
 import { useAuthReady } from './useAuthReady';
 
 export function useElements(
@@ -22,16 +22,6 @@ export function useElements(
     queryKey: ['elements', modelId, page, pageSize, filters],
     queryFn: () => api.getElements(modelId, page, pageSize, filters),
     enabled: authReady && !!modelId,
-  });
-}
-
-export function useElement(elementId: string) {
-  const authReady = useAuthReady();
-  
-  return useQuery<ElementDetail>({
-    queryKey: ['element', elementId],
-    queryFn: () => api.getElement(elementId),
-    enabled: authReady && !!elementId,
   });
 }
 

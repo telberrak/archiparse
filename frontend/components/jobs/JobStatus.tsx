@@ -29,7 +29,7 @@ export function JobStatus({ status }: JobStatusProps) {
       EN_ATTENTE: 'En attente',
       VALIDATION: 'Validation',
       VALIDE: 'Validé',
-      PARSING: 'Parsing',
+      PARSING: 'Analyse',
       TRANSFORMATION: 'Transformation',
       TERMINE: 'Terminé',
       ECHOUE: 'Échoué',

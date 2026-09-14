@@ -20,8 +20,10 @@ passlib[bcrypt]==1.7.4
 # XML
 lxml==4.9.3
 
-# XSLT
-saxonche>=12.4.0
+# Rapports (Excel / PDF)
+openpyxl==3.1.2
+Jinja2==3.1.3
+weasyprint==67.0
 
 # Tâches en arrière-plan (à ajouter en Phase 3)
 # celery==5.3.4

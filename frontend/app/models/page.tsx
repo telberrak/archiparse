@@ -1,12 +1,18 @@
 'use client';
 
-import { useModels } from '@/lib/hooks/useModels';
+import { useModels, useDeleteModel } from '@/lib/hooks/useModels';
+import { ModelCard } from '@/components/models/ModelCard';
+import { Model } from '@/lib/api';
 import Link from 'next/link';
-import { formatDistanceToNow } from 'date-fns';
-import { fr } from 'date-fns/locale';
 
 export default function ModelsPage() {
   const { data: models, isLoading, error } = useModels();
+  const deleteModel = useDeleteModel();
+
+  const handleDelete = (model: Model) => {
+    if (!window.confirm(`Supprimer le modèle « ${model.name || 'sans nom'} » ?`)) return;
+    deleteModel.mutate(model.id);
+  };
 
   if (isLoading) {
     return <div className="text-center py-8">Chargement...</div>;
@@ -35,38 +41,12 @@ export default function ModelsPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-8">Modèles</h1>
+      <h1 className="text-3xl font-bold tracking-tight text-primary mb-8">Modèles</h1>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         {models.map((model) => (
-          <Link
-            key={model.id}
-            href={`/models/${model.id}`}
-            className="p-6 border border-border rounded-lg hover:border-primary transition-colors"
-          >
-            <h3 className="font-semibold mb-2">
-              {model.name || 'Modèle sans nom'}
-            </h3>
-            {model.statistics && (
-              <div className="text-sm text-muted-foreground space-y-1 mb-4">
-                <p>Éléments: {model.statistics.elements || 0}</p>
-                <p>Espaces: {model.statistics.spaces || 0}</p>
-                <p>Niveaux: {model.statistics.storeys || 0}</p>
-              </div>
-            )}
-            <p className="text-xs text-muted-foreground">
-              {formatDistanceToNow(new Date(model.created_at), {
-                addSuffix: true,
-                locale: fr,
-              })}
-            </p>
-          </Link>
+          <ModelCard key={model.id} model={model} onDelete={handleDelete} />
         ))}
       </div>
     </div>
   );
 }
-
-
-
-
-

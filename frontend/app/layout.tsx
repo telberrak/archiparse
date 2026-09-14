@@ -2,15 +2,15 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from './providers';
-import { Navigation } from '@/components/layout/Navigation';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { TenantInitializer } from '@/components/TenantInitializer';
+import { AppShell } from '@/components/layout/AppShell';
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Archiparse - Plateforme SaaS IFCXML',
-  description: 'Upload, validation, parsing et exploration de fichiers IFCXML',
+  title: 'Archiparse — Gestion et exploration de modèles IFC',
+  description: 'Importez, validez et explorez vos fichiers IFCXML',
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },
@@ -32,12 +32,7 @@ export default function RootLayout({
         <ErrorBoundary>
           <Providers>
             <TenantInitializer>
-              <div className="min-h-screen bg-background">
-                <Navigation />
-                <main className="container mx-auto px-4 py-8">
-                  {children}
-                </main>
-              </div>
+              <AppShell>{children}</AppShell>
             </TenantInitializer>
           </Providers>
         </ErrorBoundary>

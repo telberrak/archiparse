@@ -14,6 +14,11 @@ RUN npm ci
 # Copier le reste du code
 COPY . .
 
+# Inliné au build par Next.js (NEXT_PUBLIC_*). Doit être une URL joignable
+# depuis le navigateur, pas le hostname interne Docker "backend".
+ARG NEXT_PUBLIC_API_URL=http://localhost:8000
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+
 # Build de l'application
 RUN npm run build
 

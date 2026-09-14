@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>{{ model_name }}</title>
+<style>
+    @page {
+        size: A4 landscape;
+        margin: 1.8cm 1.5cm;
+        @bottom-center {
+            content: "Archiparse — Rapport de quantités — Page " counter(page) " / " counter(pages);
+            font-size: 8pt;
+            color: #8a8f98;
+        }
+    }
+    * { box-sizing: border-box; }
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        color: #1f2430;
+        font-size: 10pt;
+        margin: 0;
+    }
+    .cover {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 24cm;
+        border-bottom: 4px solid #2f6f4f;
+        page-break-after: always;
+    }
+    .cover .brand-logo {
+        max-height: 1.8cm;
+        max-width: 6cm;
+        margin-bottom: 0.5cm;
+    }
+    .cover .eyebrow {
+        color: #2f6f4f;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-size: 10pt;
+        margin-bottom: 0.4cm;
+    }
+    .cover h1 {
+        font-size: 30pt;
+        margin: 0 0 0.3cm 0;
+        color: #1f2430;
+    }
+    .cover .subtitle {
+        font-size: 12pt;
+        color: #555b66;
+        margin-bottom: 1.2cm;
+    }
+    .cover .meta-table {
+        border-collapse: collapse;
+    }
+    .cover .meta-table td {
+        padding: 0.15cm 0.6cm 0.15cm 0;
+        font-size: 10.5pt;
+    }
+    .cover .meta-table td.label {
+        color: #8a8f98;
+        text-transform: uppercase;
+        font-size: 8.5pt;
+        letter-spacing: 0.05em;
+    }
+    .summary-cards {
+        display: flex;
+        gap: 0.6cm;
+        margin-top: 1.2cm;
+    }
+    .summary-cards .card {
+        border: 1px solid #dfe3e8;
+        border-radius: 4px;
+        padding: 0.4cm 0.6cm;
+        min-width: 3.2cm;
+    }
+    .summary-cards .card .value {
+        font-size: 18pt;
+        font-weight: 700;
+        color: #2f6f4f;
+    }
+    .summary-cards .card .label {
+        font-size: 8.5pt;
+        color: #8a8f98;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+    .warnings {
+        margin-top: 1cm;
+        padding: 0.4cm 0.6cm;
+        border-left: 3px solid #c98a1f;
+        background: #fdf6e8;
+        font-size: 9pt;
+        max-width: 14cm;
+    }
+    .warnings .title {
+        font-weight: 700;
+        color: #8a5a10;
+        margin-bottom: 0.15cm;
+    }
+    section.schedule {
+        page-break-inside: avoid;
+        margin-bottom: 1cm;
+    }
+    section.schedule h2 {
+        font-size: 13pt;
+        color: #1f2430;
+        border-bottom: 2px solid #2f6f4f;
+        padding-bottom: 0.15cm;
+        margin-bottom: 0.3cm;
+    }
+    table.data {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 8.5pt;
+    }
+    table.data thead th {
+        background: #2f6f4f;
+        color: #ffffff;
+        text-align: left;
+        padding: 0.18cm 0.25cm;
+        font-weight: 600;
+    }
+    table.data thead th.numeric {
+        text-align: right;
+    }
+    table.data tbody td {
+        padding: 0.15cm 0.25cm;
+        border-bottom: 1px solid #e7eaee;
+    }
+    table.data tbody td.numeric {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+    }
+    table.data tbody tr:nth-child(even) {
+        background: #f7f9f8;
+    }
+    .empty-note {
+        color: #8a8f98;
+        font-style: italic;
+        font-size: 9pt;
+    }
+    .footer-note {
+        margin-top: 0.4cm;
+        font-size: 8pt;
+        color: #8a8f98;
+    }
+</style>
+</head>
+<body>
+
+<div class="cover">
+    {% if logo_data_uri %}
+    <img class="brand-logo" src="{{ logo_data_uri }}" alt="Logo">
+    {% endif %}
+    <div class="eyebrow">Archiparse — Rapport de quantités</div>
+    <h1>{{ model_name }}</h1>
+    <div class="subtitle">{{ project_description or "Rapport généré à partir du modèle IFC" }}</div>
+
+    <table class="meta-table">
+        <tr>
+            <td class="label">Généré le</td>
+            <td>{{ generated_at }}</td>
+        </tr>
+        <tr>
+            <td class="label">Version IFC</td>
+            <td>{{ ifc_version or "Non renseignée" }}</td>
+        </tr>
+    </table>
+
+    <div class="summary-cards">
+        <div class="card">
+            <div class="value">{{ total_elements }}</div>
+            <div class="label">Éléments</div>
+        </div>
+        <div class="card">
+            <div class="value">{{ total_storeys }}</div>
+            <div class="label">Étages</div>
+        </div>
+        <div class="card">
+            <div class="value">{{ total_spaces }}</div>
+            <div class="label">Espaces</div>
+        </div>
+    </div>
+
+    {% if warnings %}
+    <div class="warnings">
+        <div class="title">Points de vigilance ({{ warnings|length }})</div>
+        {% for w in warnings[:8] %}
+        <div>• {{ w }}</div>
+        {% endfor %}
+        {% if warnings|length > 8 %}
+        <div>… et {{ warnings|length - 8 }} autre(s).</div>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+{% for schedule in schedules %}
+<section class="schedule">
+    <h2>{{ schedule.title }} ({{ schedule.rows|length }})</h2>
+    {% if schedule.rows %}
+    <table class="data">
+        <thead>
+            <tr>
+                {% for col in schedule.columns %}
+                <th class="{{ 'numeric' if col.numeric else '' }}">{{ col.label }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in schedule.rows %}
+            <tr>
+                {% for col in schedule.columns %}
+                <td class="{{ 'numeric' if col.numeric else '' }}">{{ "" if row.get(col.key) is none else row.get(col.key) }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-note">Aucun élément de ce type dans le modèle.</div>
+    {% endif %}
+</section>
+{% endfor %}
+
+<div class="footer-note">Document généré automatiquement par Archiparse — les quantités proviennent des jeux de quantités (Qto) résolus depuis le fichier IFCXML source.</div>
+
+</body>
+</html>

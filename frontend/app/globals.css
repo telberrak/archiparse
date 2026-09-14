@@ -3,35 +3,26 @@
 @tailwind utilities;
 
 :root {
-  /* Blue Theme - Light Mode */
+  /* Bright professional theme */
   --background: 0 0% 100%;
   --foreground: 222 47% 11%;
   --primary: 217 91% 60%;
   --primary-foreground: 0 0% 100%;
-  --secondary: 214 32% 91%;
+  --secondary: 210 20% 96%;
   --secondary-foreground: 222 47% 11%;
-  --muted: 210 40% 96%;
-  --muted-foreground: 215 16% 47%;
-  --accent: 217 91% 60%;
-  --accent-foreground: 0 0% 100%;
-  --border: 214 32% 91%;
-}
+  --muted: 210 20% 97%;
+  /* Darkened for real readability (was 215 16% 47%, ~4.7:1 on white —
+     technically AA but looked washed out, especially at small sizes). */
+  --muted-foreground: 215 19% 35%;
+  --accent: 217 91% 96%;
+  --accent-foreground: 217 91% 35%;
+  --border: 199 84% 79%;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Blue Theme - Dark Mode */
-    --background: 222 47% 11%;
-    --foreground: 210 40% 98%;
-    --primary: 217 91% 60%;
-    --primary-foreground: 222 47% 11%;
-    --secondary: 217 33% 18%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217 33% 18%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 217 91% 60%;
-    --accent-foreground: 222 47% 11%;
-    --border: 217 33% 18%;
-  }
+  /* Sidebar */
+  --sidebar: 210 25% 98%;
+  --sidebar-foreground: 222 47% 11%;
+  --sidebar-border: 199 84% 79%;
+  --sidebar-accent: 214 32% 93%;
 }
 
 * {
@@ -43,16 +34,16 @@ body {
   background: hsl(var(--background));
 }
 
-/* Blue theme enhancements */
-.bg-gradient-blue {
+/* Brand accent helpers */
+.bg-gradient-brand {
   background: linear-gradient(135deg, hsl(217, 91%, 60%) 0%, hsl(217, 91%, 50%) 100%);
 }
 
-.text-primary-blue {
+.text-primary-brand {
   color: hsl(217, 91%, 60%);
 }
 
-.border-primary-blue {
+.border-primary-brand {
   border-color: hsl(217, 91%, 60%);
 }
 

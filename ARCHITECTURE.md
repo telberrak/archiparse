@@ -18,23 +18,24 @@
 │                  Backend FastAPI                             │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
 │  │   Upload     │  │ Validation   │  │   Parseur    │     │
-│  │   Service    │  │   Service    │  │   Service    │     │
+│  │   Service    │  │   Service    │  │  (résout     │     │
+│  │              │  │              │  │  Psets/Qtos) │     │
 │  └──────────────┘  └──────────────┘  └──────────────┘     │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐     │
-│  │   XSLT       │  │  Travailleurs │  │   Locataire  │     │
-│  │   Service    │  │  en Arrière- │  │  Middleware  │     │
-│  └──────────────┘  └──────────────┘  └──────────────┘     │
+│  ┌──────────────┐  ┌──────────────┐                        │
+│  │  Travailleurs │  │   Locataire  │                        │
+│  │  en Arrière- │  │  Middleware  │                        │
+│  └──────────────┘  └──────────────┘                        │
 └─────────────────────────────────────────────────────────────┘
                             │
                             │
-        ┌───────────────────┼───────────────────┐
-        │                   │                   │
-        ▼                   ▼                   ▼
-┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-│  PostgreSQL  │  │ Stockage     │  │   XSLT       │
-│   Base de    │  │  Fichiers    │  │  Modèles     │
-│   Données    │  │ (S3/Local)   │  │              │
-└──────────────┘  └──────────────┘  └──────────────┘
+                ┌───────────┴───────────┐
+                │                       │
+                ▼                       ▼
+        ┌──────────────┐      ┌──────────────┐
+        │  PostgreSQL  │      │ Stockage     │
+        │   Base de    │      │  Fichiers    │
+        │   Données    │      │ (S3/Local)   │
+        └──────────────┘      └──────────────┘
 ```
 
 ### Principes Fondamentaux
@@ -43,7 +44,7 @@
 2. **Traitement Asynchrone** : Les opérations lourdes s'exécutent dans des workers en arrière-plan
 3. **Prêt Multi-Tenant** : Isolation des locataires au niveau base de données et stockage
 4. **Validation en Premier** : Validation XSD avant tout traitement
-5. **XSLT Modulaire** : Modules de transformation réutilisables et composables
+5. **Résolution en Python** : Les Psets/Qtos sont résolus en une seconde passe Python sur le graphe d'entités déjà parsé, sans couche de transformation séparée
 
 ## Responsabilités des Composants
 
@@ -62,20 +63,14 @@
 - Rapporter les erreurs de validation avec numéros de ligne
 
 #### Service de Parsing
-- Parser IFCXML en streaming avec iterparse
+- Parser IFCXML en streaming avec iterparse (une seule passe pour les entités/éléments, gardant la mémoire bornée)
 - Extraire les entités (Project, Site, Building, Storey, Space, Elements)
-- Résoudre les GUIDs et relations
-- Construire un graphe en mémoire (petits fichiers) ou streamer vers la base
-
-#### Service XSLT
-- Exécuter les transformations XSLT 2.0+ avec Saxon-HE
-- Générer du JSON normalisé
-- Générer une documentation HTML optionnelle
-- Mettre en cache les feuilles de style compilées
+- Résoudre les GUIDs et relations (CONTAINS, AGGREGATES, VOIDS, FILLS)
+- Résoudre en une seconde passe les Psets/Qtos (`IfcRelDefinesByProperties`, `IfcElementQuantity`) et les matériaux, en Python pur, directement dans les colonnes JSONB `properties`/`quantities` des éléments — sans étape de transformation séparée
 
 #### Workers en Arrière-Plan
 - Traiter les uploads de fichiers de manière asynchrone
-- Gérer le pipeline validation → parsing → transformation
+- Gérer le pipeline validation → parsing (avec résolution Psets/Qtos)
 - Mettre à jour le statut des tâches
 - Envoyer des notifications en cas de succès/échec
 
@@ -92,16 +87,15 @@
 - Messages d'erreur et logs
 
 #### Explorateur de Modèle
-- Vue arborescente hiérarchique (Project → Site → Building → Storey → Space)
-- Liste d'éléments avec filtres
-- Fonctionnalité de recherche
-- Navigation des relations
+Page plein écran `/models/{id}` (voir [EXPLORER.md](./EXPLORER.md)), calquée sur la maquette `ifc_browser_fr.html` :
+
+- En-tête : nom de projet, version IFC, recherche nom/GUID, export Excel/PDF
+- Rail gauche : arbre `Project → Site → Building → Storey → Space`, puis chips de types IFC et liste groupée
+- Panneau droit : emplacement, quantités (barres), jeux de propriétés, matériau
+- Types spatiaux racines (`IfcProject`, `IfcSite`, `IfcBuilding`, `IfcBuildingStorey`) exclus de la liste des éléments ; navigables uniquement via l'arbre
 
 #### Vue de Détail d'Élément
-- Propriétés d'élément (Psets)
-- Quantités (Qto)
-- Relations (contenu, vides/remplissages)
-- Géométrie 3D (si disponible)
+Intégrée au panneau droit de l'explorateur — pas de visionneuse JSON brute, pas d'outil de coordination BIM générique.
 
 ## Flux de Données
 
@@ -123,16 +117,13 @@
    ↓
 6. Service de Parsing:
    - Parser XML en streaming
-   - Extraire les entités
+   - Extraire les entités et éléments
+   - Résoudre les Psets/Qtos (deuxième passe Python) dans les colonnes JSONB
    - Stocker dans la base de données
    ↓
-7. Service XSLT:
-   - Transformer en JSON normalisé
-   - Stocker JSON dans la base de données
+7. Statut de tâche mis à jour (statut: TERMINE)
    ↓
-8. Statut de tâche mis à jour (statut: TERMINE)
-   ↓
-9. Frontend notifié via WebSocket/SSE
+8. Frontend notifié via WebSocket/SSE
 ```
 
 ## Pile Technologique
@@ -141,8 +132,7 @@
 - **Framework** : FastAPI 0.104+
 - **Base de données** : PostgreSQL 14+ avec JSONB
 - **File d'attente de tâches** : Celery + Redis (ou RQ)
-- **Moteur XSLT** : Saxon-HE (via package Python saxonche)
-- **Parsing XML** : lxml (iterparse) ou xml.etree.ElementTree
+- **Parsing XML** : lxml (iterparse), résolution Psets/Qtos en Python pur
 - **Stockage de fichiers** : Système de fichiers local (dev) / S3 (prod)
 
 ### Frontend
@@ -205,6 +195,5 @@
 |--------|--------|-------------|
 | Épuisement mémoire sur fichiers volumineux | Élevé | Parsing en streaming obligatoire, pas de chargement DOM |
 | Performance validation XSD | Moyen | Validation en streaming, cache des schémas compilés |
-| Complexité transformation XSLT | Moyen | XSLT modulaire, tests avec vrais fichiers IFCXML |
 | Performance base de données sur modèles volumineux | Élevé | Indexation appropriée, requêtes JSONB, pagination |
 | Fuite de données locataire | Critique | Sécurité au niveau des lignes, isolation des chemins, logs d'audit |

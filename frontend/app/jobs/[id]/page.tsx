@@ -2,6 +2,7 @@
 
 import { useParams } from 'next/navigation';
 import { useJob } from '@/lib/hooks/useJobs';
+import { useModels } from '@/lib/hooks/useModels';
 import { JobStatus } from '@/components/jobs/JobStatus';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
@@ -25,6 +26,8 @@ export default function JobDetailPage() {
   const params = useParams();
   const jobId = params.id as string;
   const { data: job, isLoading, error, refetch } = useJob(jobId);
+  const { data: models } = useModels();
+  const linkedModel = models?.find((model) => model.job_id === jobId);
 
   const progress = useMemo(() => {
     if (!job) return 0;
@@ -74,7 +77,7 @@ export default function JobDetailPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl">
       <div className="mb-6">
         <Link href="/jobs">
           <Button variant="ghost" size="sm">
@@ -89,7 +92,7 @@ export default function JobDetailPage() {
         <div>
           <div className="flex items-start justify-between mb-4">
             <div className="flex-1">
-              <h1 className="text-3xl font-bold mb-2">{job.filename}</h1>
+              <h1 className="text-3xl font-bold text-primary mb-2">{job.filename}</h1>
               <div className="flex items-center gap-4 flex-wrap">
                 <JobStatus status={job.status} />
                 {job.ifc_version && (
@@ -117,7 +120,7 @@ export default function JobDetailPage() {
               <Progress value={progress} showLabel={true} />
               <p className="text-xs text-muted-foreground mt-1 text-center">
                 {job.status === 'VALIDATION' && 'Validation du fichier XSD...'}
-                {job.status === 'PARSING' && 'Parsing du fichier XML...'}
+                {job.status === 'PARSING' && 'Analyse du fichier XML...'}
                 {job.status === 'TRANSFORMATION' && 'Transformation en JSON...'}
               </p>
             </div>
@@ -238,10 +241,10 @@ export default function JobDetailPage() {
         {/* Actions */}
         <div className="flex gap-4">
           {job.status === 'TERMINE' && (
-            <Link href="/models">
+            <Link href={linkedModel ? `/models/${linkedModel.id}` : '/models'}>
               <Button>
                 <CheckCircle className="w-4 h-4 mr-2" />
-                Voir le modèle
+                Explorer le modèle
               </Button>
             </Link>
           )}

@@ -4,12 +4,12 @@ Points d'extrémité d'upload de fichiers
 Gère l'upload de fichiers IFCXML.
 """
 
-from fastapi import APIRouter, UploadFile, File, Depends, HTTPException, status, BackgroundTasks
+from fastapi import APIRouter, UploadFile, File, Form, Depends, HTTPException, status, BackgroundTasks
 from sqlalchemy.orm import Session
 from uuid import UUID
 
 from app.core.dependencies import get_verified_tenant, get_db_session
-from app.models.database import Tenant
+from app.models.database import Tenant, Project
 from app.services.upload_service import upload_service
 from app.services.quota_service import quota_service
 from app.services.audit_service import audit_service
@@ -26,26 +26,35 @@ async def upload_file(
     background_tasks: BackgroundTasks,
     request: Request,
     file: UploadFile = File(...),
+    project_id: UUID = Form(...),
     tenant: Tenant = Depends(get_verified_tenant),
     db: Session = Depends(get_db_session)
 ):
     """
     Upload un fichier IFCXML.
-    
-    Le fichier est sauvegardé et une tâche de traitement est créée.
-    Le traitement (validation, parsing) se fait en arrière-plan.
-    
+
+    Le fichier est sauvegardé et une tâche de traitement est créée, rattachée
+    au projet indiqué (voir projects.py). Le traitement (validation, parsing)
+    se fait en arrière-plan.
+
     Args:
         file: Fichier uploadé
+        project_id: Projet auquel rattacher le modèle une fois parsé
         tenant_id: ID du locataire (depuis les en-têtes)
         db: Session de base de données
-        
+
     Returns:
         UploadResponse: Informations sur la tâche créée
-        
+
     Raises:
-        HTTPException: Si le fichier est invalide ou trop volumineux
+        HTTPException: Si le fichier ou le projet est invalide, ou le fichier trop volumineux
     """
+    project = db.query(Project).filter(
+        Project.id == project_id, Project.tenant_id == tenant.id, Project.status == "active"
+    ).first()
+    if not project:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Projet non trouvé")
+
     # Vérifier la taille du fichier
     if file.size and file.size > settings.MAX_FILE_SIZE:
         raise HTTPException(
@@ -93,7 +102,8 @@ async def upload_file(
             tenant_id=tenant.id,
             filename=file.filename or "upload.ifcxml",
             file_size=file_size,
-            file_path=saved_path
+            file_path=saved_path,
+            project_id=project_id
         )
         
         # Logger l'action

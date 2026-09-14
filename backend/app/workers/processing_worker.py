@@ -1,7 +1,7 @@
 """
 Worker de traitement en arrière-plan
 
-Traite les tâches d'upload: validation, parsing, transformation.
+Traite les tâches d'upload: validation, parsing (avec résolution des Psets/Qtos).
 """
 
 from pathlib import Path
@@ -14,13 +14,14 @@ from app.models.database import Job, Model, Tenant
 from app.models.schemas import JobStatus
 from app.services.validation_service import validation_service
 from app.services.parser_service import parser_service
-from app.services.xslt_service import xslt_service
+from app.services.quality_service import quality_service
+from app.services.compliance_service import compliance_service
 
 
 def process_job(job_id: UUID):
     """
-    Traite une tâche complète: validation, parsing, transformation.
-    
+    Traite une tâche complète: validation, parsing (résolution Psets/Qtos), contrôle qualité.
+
     Args:
         job_id: ID de la tâche à traiter
     """
@@ -86,6 +87,7 @@ def process_job(job_id: UUID):
         model = Model(
             job_id=job.id,
             tenant_id=job.tenant_id,
+            project_id=job.project_id,
             name=job.filename,
             statistics={}
         )
@@ -102,16 +104,41 @@ def process_job(job_id: UUID):
             )
             
             # Mettre à jour les statistiques
-            model.statistics = {
+            new_statistics = {
                 "elements": stats["elements"],
                 "spaces": stats["spaces"],
                 "storeys": stats["storeys"],
-                "relationships": stats["relationships"]
+                "relationships": stats["relationships"],
+                "ifc_version": job.ifc_version,
+                "project_name": stats.get("project_name"),
             }
-            
+
             if stats.get("project_guid"):
                 model.project_guid = stats["project_guid"]
-            
+
+            # Étape 2bis: Contrôle qualité (règles déterministes, pas d'IA)
+            print(f"Contrôle qualité du modèle {model.id}...")
+            try:
+                quality_result = quality_service.check_model(model.id, job.tenant_id, db)
+                new_statistics["quality_warnings"] = quality_result["warnings"]
+                new_statistics["quality_summary"] = quality_result["summary"]
+            except Exception as e:
+                print(f"Erreur lors du contrôle qualité (non bloquant): {str(e)}")
+                new_statistics["quality_warnings"] = []
+                new_statistics["quality_summary"] = {"error": str(e)}
+
+            # Étape 2ter: Contrôles réglementaires indicatifs (règles déterministes)
+            print(f"Contrôle réglementaire indicatif du modèle {model.id}...")
+            try:
+                compliance_result = compliance_service.check_model(model.id, job.tenant_id, db)
+                new_statistics["compliance_warnings"] = compliance_result["warnings"]
+                new_statistics["compliance_summary"] = compliance_result["summary"]
+            except Exception as e:
+                print(f"Erreur lors du contrôle réglementaire (non bloquant): {str(e)}")
+                new_statistics["compliance_warnings"] = []
+                new_statistics["compliance_summary"] = {"error": str(e)}
+
+            model.statistics = new_statistics
             db.commit()
             
         except Exception as e:
@@ -119,36 +146,6 @@ def process_job(job_id: UUID):
             job.error_message = f"Erreur lors du parsing: {str(e)}"
             db.commit()
             raise
-        
-        # Étape 3: Transformation XSLT
-        print(f"Transformation XSLT du fichier {job.filename}...")
-        job.status = JobStatus.TRANSFORMATION
-        db.commit()
-        
-        if xslt_service:
-            try:
-                # Transformer en JSON normalisé
-                normalized_json = xslt_service.transform_to_json(
-                    xml_file_path=file_path,
-                    ifc_version=job.ifc_version
-                )
-                
-                # Stocker le JSON dans le modèle
-                model.normalized_json = normalized_json
-                db.commit()
-                
-            except Exception as e:
-                # Si la transformation échoue, on continue quand même
-                # Le modèle est déjà parsé et stocké
-                print(f"Erreur lors de la transformation XSLT (non bloquant): {str(e)}")
-                # On peut stocker une erreur dans les métadonnées
-                # Note: model n'a pas de champ metadata, utiliser statistics à la place
-                if not model.statistics:
-                    model.statistics = {}
-                model.statistics["xslt_error"] = str(e)
-                db.commit()
-        else:
-            print("Service XSLT non disponible, transformation ignorée")
         
         # Terminé
         print(f"Traitement terminé pour {job.filename}")

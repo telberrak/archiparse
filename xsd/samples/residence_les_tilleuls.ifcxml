@@ -1,0 +1,802 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ifcXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ifc="http://www.buildingsmart-tech.org/ifcXML/IFC4/final"
+        xmlns="http://www.buildingsmart-tech.org/ifcXML/IFC4/final"
+        xsi:schemaLocation="http://www.buildingsmart-tech.org/ifcXML/IFC4/final ifcXML4.xsd">
+  <header>
+    <name>Residence Les Tilleuls</name>
+    <time_stamp>2026-09-13T09:00:00</time_stamp>
+    <author>ArchiParse Sample Generator</author>
+    <organization>ArchiParse</organization>
+    <preprocessor_version>1.0.0</preprocessor_version>
+    <originating_system>ArchiParse Sample Generator</originating_system>
+    <authorization>Sample</authorization>
+    <documentation>Fichier IFCXML4 d'exemple, valide contre ifcXML4.xsd : R+3 avec toiture, murs, fenetres, porte et proprietes de securite incendie.</documentation>
+  </header>
+  
+  <ifc:IfcProject id="i1" GlobalId="1molpEbqxrvxCDGAaKZIJc" Name="Residence Les Tilleuls" Description="Petit immeuble R+3 avec toiture" LongName="Residence Les Tilleuls - Batiment A" Phase="CONCEPTION" ObjectType="Project"/>
+  <ifc:IfcSite id="i2" GlobalId="_FasT1dhXL2zWGCyXIlQT3" Name="Terrain - Les Tilleuls" Description="Parcelle du projet" ObjectType="Site"/>
+  <ifc:IfcBuilding id="i3" GlobalId="Xle8HpVJK9B5BDvYtqC9yR" Name="Batiment A" Description="Batiment principal" ObjectType="Residential" ElevationOfRefHeight="0.0" ElevationOfTerrain="0.0"/>
+  
+  <ifc:IfcBuildingStorey id="i4" GlobalId="hsnbEC8wVuUiyvGd_$Cbs7" Name="Rez-de-chaussee" Description="Niveau Rez-de-chaussee" ObjectType="Storey" Elevation="0.0"/>
+  <ifc:IfcBuildingStorey id="i5" GlobalId="Zdj6RmzHZ4ZjTPn7QMQiGA" Name="Etage 1" Description="Niveau Etage 1" ObjectType="Storey" Elevation="3.0"/>
+  <ifc:IfcBuildingStorey id="i6" GlobalId="e69N6_Q$2X40ooI3kE0DkW" Name="Etage 2" Description="Niveau Etage 2" ObjectType="Storey" Elevation="6.0"/>
+  <ifc:IfcBuildingStorey id="i7" GlobalId="lwadnDbhcmwpKEG8Cpevjn" Name="Etage 3" Description="Niveau Etage 3" ObjectType="Storey" Elevation="9.0"/>
+  
+  <ifc:IfcRelAggregates id="i8" GlobalId="K2iCMlfgSRdKFAXN75Nl69" Name="ProjectContainsSite">
+    <ifc:RelatingObject xsi:type="ifc:IfcProject" ref="i1"/>
+    <ifc:RelatedObjects ifc:itemType="ifc:IfcObjectDefinition" ifc:cType="set">
+      <ifc:IfcSite ref="i2"/>
+    </ifc:RelatedObjects>
+  </ifc:IfcRelAggregates>
+  <ifc:IfcRelAggregates id="i9" GlobalId="LPyomn1m6ttBUPRfLZAiZ$" Name="SiteContainsBuilding">
+    <ifc:RelatingObject xsi:type="ifc:IfcSite" ref="i2"/>
+    <ifc:RelatedObjects ifc:itemType="ifc:IfcObjectDefinition" ifc:cType="set">
+      <ifc:IfcBuilding ref="i3"/>
+    </ifc:RelatedObjects>
+  </ifc:IfcRelAggregates>
+  <ifc:IfcRelAggregates id="i10" GlobalId="$38bZVPtn4LugAYeF5rHMm" Name="BuildingContainsStoreys">
+    <ifc:RelatingObject xsi:type="ifc:IfcBuilding" ref="i3"/>
+    <ifc:RelatedObjects ifc:itemType="ifc:IfcObjectDefinition" ifc:cType="set">
+      <ifc:IfcBuildingStorey ref="i4"/>
+      <ifc:IfcBuildingStorey ref="i5"/>
+      <ifc:IfcBuildingStorey ref="i6"/>
+      <ifc:IfcBuildingStorey ref="i7"/>
+    </ifc:RelatedObjects>
+  </ifc:IfcRelAggregates>
+  
+  <ifc:IfcWall id="i11" GlobalId="f5nMQ2IGvRqXCHgDHD8hAw" Name="Mur Nord - Rez-de-chaussee" Description="Mur exterieur porteur" Tag="M-RDC-N"/>
+  <ifc:IfcPropertySet id="i12" GlobalId="uR67i6kbBZWtkCsmOsl6YI" Name="Pset_WallCommon">
+    <ifc:HasProperties ifc:itemType="ifc:IfcProperty" ifc:cType="set">
+      <ifc:IfcPropertySingleValue id="i13" Name="IsExternal">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i14" Name="LoadBearing">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i15" Name="FireRating">
+        <ifc:NominalValue>
+          <ifc:IfcLabel-wrapper>REI 120</ifc:IfcLabel-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i16" Name="Combustible">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>false</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+    </ifc:HasProperties>
+  </ifc:IfcPropertySet>
+  <ifc:IfcElementQuantity id="i17" GlobalId="TKq4eh8MHnwoQNoQRUvDki" Name="Qto_WallBaseQuantities">
+    <ifc:Quantities ifc:itemType="ifc:IfcPhysicalQuantity" ifc:cType="set">
+      <ifc:IfcQuantityLength id="i18" Name="Length" LengthValue="8.0"/>
+      <ifc:IfcQuantityLength id="i19" Name="Height" LengthValue="3.0"/>
+      <ifc:IfcQuantityLength id="i20" Name="Width" LengthValue="0.25"/>
+      <ifc:IfcQuantityArea id="i21" Name="NetSideArea" AreaValue="24.0"/>
+      <ifc:IfcQuantityVolume id="i22" Name="NetVolume" VolumeValue="6.0"/>
+    </ifc:Quantities>
+  </ifc:IfcElementQuantity>
+  <ifc:IfcRelDefinesByProperties id="i23" GlobalId="SZ6lkc6OlkLZYVDuUeF_Br">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWall" ref="i11"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcPropertySet ref="i12" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelDefinesByProperties id="i24" GlobalId="8FBOQcfX_KPKdgArB9t4qe">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWall" ref="i11"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcElementQuantity ref="i17" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcWindow id="i25" GlobalId="QUBbwEs5Ka1Wrha2AwwWMd" Name="Fenetre Nord - Rez-de-chaussee" Tag="F-RDC-N" OverallHeight="1.4" OverallWidth="1.2" PredefinedType="window"/>
+  <ifc:IfcPropertySet id="i26" GlobalId="HOqXmdftw$JEGQ$ElVl3bz" Name="Pset_WindowCommon">
+    <ifc:HasProperties ifc:itemType="ifc:IfcProperty" ifc:cType="set">
+      <ifc:IfcPropertySingleValue id="i27" Name="IsExternal">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i28" Name="ThermalTransmittance">
+        <ifc:NominalValue>
+          <ifc:IfcReal-wrapper>1.4</ifc:IfcReal-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+    </ifc:HasProperties>
+  </ifc:IfcPropertySet>
+  <ifc:IfcElementQuantity id="i29" GlobalId="uWGF98lqbFx1fCnGJzhmQs" Name="Qto_WindowBaseQuantities">
+    <ifc:Quantities ifc:itemType="ifc:IfcPhysicalQuantity" ifc:cType="set">
+      <ifc:IfcQuantityLength id="i30" Name="Width" LengthValue="1.2"/>
+      <ifc:IfcQuantityLength id="i31" Name="Height" LengthValue="1.4"/>
+      <ifc:IfcQuantityArea id="i32" Name="Area" AreaValue="1.68"/>
+    </ifc:Quantities>
+  </ifc:IfcElementQuantity>
+  <ifc:IfcRelDefinesByProperties id="i33" GlobalId="K2SVLPeUWrb$iaGxdBI03e">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWindow" ref="i25"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcPropertySet ref="i26" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelDefinesByProperties id="i34" GlobalId="tu49Pt67bqUz9oBQsHbef7">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWindow" ref="i25"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcElementQuantity ref="i29" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcWall id="i35" GlobalId="mPRLZY8m6li8gaYqP5$mjX" Name="Mur Sud - Rez-de-chaussee" Description="Mur exterieur porteur" Tag="M-RDC-S"/>
+  <ifc:IfcPropertySet id="i36" GlobalId="xBrxBuSht5y5_K5MlPd53i" Name="Pset_WallCommon">
+    <ifc:HasProperties ifc:itemType="ifc:IfcProperty" ifc:cType="set">
+      <ifc:IfcPropertySingleValue id="i37" Name="IsExternal">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i38" Name="LoadBearing">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i39" Name="FireRating">
+        <ifc:NominalValue>
+          <ifc:IfcLabel-wrapper>REI 120</ifc:IfcLabel-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i40" Name="Combustible">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>false</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+    </ifc:HasProperties>
+  </ifc:IfcPropertySet>
+  <ifc:IfcElementQuantity id="i41" GlobalId="7$gbmeJV6Ce0Ss$0llZsqB" Name="Qto_WallBaseQuantities">
+    <ifc:Quantities ifc:itemType="ifc:IfcPhysicalQuantity" ifc:cType="set">
+      <ifc:IfcQuantityLength id="i42" Name="Length" LengthValue="8.0"/>
+      <ifc:IfcQuantityLength id="i43" Name="Height" LengthValue="3.0"/>
+      <ifc:IfcQuantityLength id="i44" Name="Width" LengthValue="0.25"/>
+      <ifc:IfcQuantityArea id="i45" Name="NetSideArea" AreaValue="24.0"/>
+      <ifc:IfcQuantityVolume id="i46" Name="NetVolume" VolumeValue="6.0"/>
+    </ifc:Quantities>
+  </ifc:IfcElementQuantity>
+  <ifc:IfcRelDefinesByProperties id="i47" GlobalId="jdw3QurFMwfJ$67gyMBC0a">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWall" ref="i35"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcPropertySet ref="i36" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelDefinesByProperties id="i48" GlobalId="loyG2D4KF8yamKvLRGlA07">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWall" ref="i35"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcElementQuantity ref="i41" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcWindow id="i49" GlobalId="SCTngKrlffmVV8839ZZ4Pc" Name="Fenetre Sud - Rez-de-chaussee" Tag="F-RDC-S" OverallHeight="1.4" OverallWidth="1.2" PredefinedType="window"/>
+  <ifc:IfcPropertySet id="i50" GlobalId="8jrvPykxtjwXMH1netmC30" Name="Pset_WindowCommon">
+    <ifc:HasProperties ifc:itemType="ifc:IfcProperty" ifc:cType="set">
+      <ifc:IfcPropertySingleValue id="i51" Name="IsExternal">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i52" Name="ThermalTransmittance">
+        <ifc:NominalValue>
+          <ifc:IfcReal-wrapper>1.4</ifc:IfcReal-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+    </ifc:HasProperties>
+  </ifc:IfcPropertySet>
+  <ifc:IfcElementQuantity id="i53" GlobalId="rs2pUfrq3oIaJlJ1lFmoVj" Name="Qto_WindowBaseQuantities">
+    <ifc:Quantities ifc:itemType="ifc:IfcPhysicalQuantity" ifc:cType="set">
+      <ifc:IfcQuantityLength id="i54" Name="Width" LengthValue="1.2"/>
+      <ifc:IfcQuantityLength id="i55" Name="Height" LengthValue="1.4"/>
+      <ifc:IfcQuantityArea id="i56" Name="Area" AreaValue="1.68"/>
+    </ifc:Quantities>
+  </ifc:IfcElementQuantity>
+  <ifc:IfcRelDefinesByProperties id="i57" GlobalId="XBYFqfop6RbRmu2j6vyIHi">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWindow" ref="i49"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcPropertySet ref="i50" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelDefinesByProperties id="i58" GlobalId="SIBPMpgkDN37ejST1hnyqR">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWindow" ref="i49"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcElementQuantity ref="i53" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcDoor id="i59" GlobalId="vqFGehLzgg_i_HG8xfShYR" Name="Porte d'entree" Description="Porte principale coupe-feu" Tag="D-001" OverallHeight="2.2" OverallWidth="1.0" PredefinedType="door"/>
+  <ifc:IfcPropertySet id="i60" GlobalId="aoEM3dZ$_AT6LI_rZJWTek" Name="Pset_DoorCommon">
+    <ifc:HasProperties ifc:itemType="ifc:IfcProperty" ifc:cType="set">
+      <ifc:IfcPropertySingleValue id="i61" Name="IsExternal">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i62" Name="FireRating">
+        <ifc:NominalValue>
+          <ifc:IfcLabel-wrapper>EI 30</ifc:IfcLabel-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i63" Name="SelfClosing">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+    </ifc:HasProperties>
+  </ifc:IfcPropertySet>
+  <ifc:IfcElementQuantity id="i64" GlobalId="HkrCFXlO3uSwb1uyvCafZY" Name="Qto_DoorBaseQuantities">
+    <ifc:Quantities ifc:itemType="ifc:IfcPhysicalQuantity" ifc:cType="set">
+      <ifc:IfcQuantityLength id="i65" Name="Width" LengthValue="1.0"/>
+      <ifc:IfcQuantityLength id="i66" Name="Height" LengthValue="2.2"/>
+      <ifc:IfcQuantityArea id="i67" Name="Area" AreaValue="2.2"/>
+    </ifc:Quantities>
+  </ifc:IfcElementQuantity>
+  <ifc:IfcRelDefinesByProperties id="i68" GlobalId="ffXh9DFYl49gGvBO0aVnkc">
+    <ifc:RelatedObjects xsi:type="ifc:IfcDoor" ref="i59"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcPropertySet ref="i60" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelDefinesByProperties id="i69" GlobalId="I7gJncFe08mTUuNQhyBGxv">
+    <ifc:RelatedObjects xsi:type="ifc:IfcDoor" ref="i59"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcElementQuantity ref="i64" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelContainedInSpatialStructure id="i70" GlobalId="71R8oAS9QbFkWUNAm25lsV" Name="Contient_rdc">
+    <ifc:RelatedElements ifc:itemType="ifc:IfcProduct" ifc:cType="set">
+      <ifc:IfcWall ref="i11"/>
+      <ifc:IfcWindow ref="i25"/>
+      <ifc:IfcWall ref="i35"/>
+      <ifc:IfcWindow ref="i49"/>
+      <ifc:IfcDoor ref="i59"/>
+    </ifc:RelatedElements>
+    <ifc:RelatingStructure xsi:type="ifc:IfcBuildingStorey" ref="i4"/>
+  </ifc:IfcRelContainedInSpatialStructure>
+  
+  <ifc:IfcWall id="i71" GlobalId="oBIOznAoOiW8LUR8ibhTBZ" Name="Mur Nord - Etage 1" Description="Mur exterieur porteur" Tag="M-E1-N"/>
+  <ifc:IfcPropertySet id="i72" GlobalId="1tOXRjQN5EgAyFgPDWad_v" Name="Pset_WallCommon">
+    <ifc:HasProperties ifc:itemType="ifc:IfcProperty" ifc:cType="set">
+      <ifc:IfcPropertySingleValue id="i73" Name="IsExternal">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i74" Name="LoadBearing">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i75" Name="FireRating">
+        <ifc:NominalValue>
+          <ifc:IfcLabel-wrapper>REI 120</ifc:IfcLabel-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i76" Name="Combustible">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>false</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+    </ifc:HasProperties>
+  </ifc:IfcPropertySet>
+  <ifc:IfcElementQuantity id="i77" GlobalId="$hSQBHQXYZgTQN2vJaE7Kh" Name="Qto_WallBaseQuantities">
+    <ifc:Quantities ifc:itemType="ifc:IfcPhysicalQuantity" ifc:cType="set">
+      <ifc:IfcQuantityLength id="i78" Name="Length" LengthValue="8.0"/>
+      <ifc:IfcQuantityLength id="i79" Name="Height" LengthValue="3.0"/>
+      <ifc:IfcQuantityLength id="i80" Name="Width" LengthValue="0.25"/>
+      <ifc:IfcQuantityArea id="i81" Name="NetSideArea" AreaValue="24.0"/>
+      <ifc:IfcQuantityVolume id="i82" Name="NetVolume" VolumeValue="6.0"/>
+    </ifc:Quantities>
+  </ifc:IfcElementQuantity>
+  <ifc:IfcRelDefinesByProperties id="i83" GlobalId="Xo51nudGfrib10iYajmXGE">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWall" ref="i71"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcPropertySet ref="i72" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelDefinesByProperties id="i84" GlobalId="6c_K8Hv1r3owW_4JiV2ZE0">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWall" ref="i71"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcElementQuantity ref="i77" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcWindow id="i85" GlobalId="O12KdKBYfprCCYCb7BNF8X" Name="Fenetre Nord - Etage 1" Tag="F-E1-N" OverallHeight="1.4" OverallWidth="1.2" PredefinedType="window"/>
+  <ifc:IfcPropertySet id="i86" GlobalId="rM07v18VQYA0EyzV0zgutP" Name="Pset_WindowCommon">
+    <ifc:HasProperties ifc:itemType="ifc:IfcProperty" ifc:cType="set">
+      <ifc:IfcPropertySingleValue id="i87" Name="IsExternal">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i88" Name="ThermalTransmittance">
+        <ifc:NominalValue>
+          <ifc:IfcReal-wrapper>1.4</ifc:IfcReal-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+    </ifc:HasProperties>
+  </ifc:IfcPropertySet>
+  <ifc:IfcElementQuantity id="i89" GlobalId="WaeSLPC6$ILv41PuRdHh_W" Name="Qto_WindowBaseQuantities">
+    <ifc:Quantities ifc:itemType="ifc:IfcPhysicalQuantity" ifc:cType="set">
+      <ifc:IfcQuantityLength id="i90" Name="Width" LengthValue="1.2"/>
+      <ifc:IfcQuantityLength id="i91" Name="Height" LengthValue="1.4"/>
+      <ifc:IfcQuantityArea id="i92" Name="Area" AreaValue="1.68"/>
+    </ifc:Quantities>
+  </ifc:IfcElementQuantity>
+  <ifc:IfcRelDefinesByProperties id="i93" GlobalId="lpBRmaCU_mXxxmjAauDVqJ">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWindow" ref="i85"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcPropertySet ref="i86" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelDefinesByProperties id="i94" GlobalId="5lmYyv$UmXLkG$wQOdkOlm">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWindow" ref="i85"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcElementQuantity ref="i89" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcWall id="i95" GlobalId="J1HSINXXYmlW50yZhytWqV" Name="Mur Sud - Etage 1" Description="Mur exterieur porteur" Tag="M-E1-S"/>
+  <ifc:IfcPropertySet id="i96" GlobalId="UnnojyIbufTeWTOJz$RMPf" Name="Pset_WallCommon">
+    <ifc:HasProperties ifc:itemType="ifc:IfcProperty" ifc:cType="set">
+      <ifc:IfcPropertySingleValue id="i97" Name="IsExternal">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i98" Name="LoadBearing">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i99" Name="FireRating">
+        <ifc:NominalValue>
+          <ifc:IfcLabel-wrapper>REI 120</ifc:IfcLabel-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i100" Name="Combustible">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>false</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+    </ifc:HasProperties>
+  </ifc:IfcPropertySet>
+  <ifc:IfcElementQuantity id="i101" GlobalId="6K9gyxKrWagAItZhRUdW9B" Name="Qto_WallBaseQuantities">
+    <ifc:Quantities ifc:itemType="ifc:IfcPhysicalQuantity" ifc:cType="set">
+      <ifc:IfcQuantityLength id="i102" Name="Length" LengthValue="8.0"/>
+      <ifc:IfcQuantityLength id="i103" Name="Height" LengthValue="3.0"/>
+      <ifc:IfcQuantityLength id="i104" Name="Width" LengthValue="0.25"/>
+      <ifc:IfcQuantityArea id="i105" Name="NetSideArea" AreaValue="24.0"/>
+      <ifc:IfcQuantityVolume id="i106" Name="NetVolume" VolumeValue="6.0"/>
+    </ifc:Quantities>
+  </ifc:IfcElementQuantity>
+  <ifc:IfcRelDefinesByProperties id="i107" GlobalId="2778wwCemgDc5xjosI1j4M">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWall" ref="i95"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcPropertySet ref="i96" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelDefinesByProperties id="i108" GlobalId="0e76ivu$NQWRavXbHDuOAO">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWall" ref="i95"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcElementQuantity ref="i101" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcWindow id="i109" GlobalId="8Yf90Go4s2gToWJl$a0scM" Name="Fenetre Sud - Etage 1" Tag="F-E1-S" OverallHeight="1.4" OverallWidth="1.2" PredefinedType="window"/>
+  <ifc:IfcPropertySet id="i110" GlobalId="3FtN02cF1XwG36UBSmYSvb" Name="Pset_WindowCommon">
+    <ifc:HasProperties ifc:itemType="ifc:IfcProperty" ifc:cType="set">
+      <ifc:IfcPropertySingleValue id="i111" Name="IsExternal">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i112" Name="ThermalTransmittance">
+        <ifc:NominalValue>
+          <ifc:IfcReal-wrapper>1.4</ifc:IfcReal-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+    </ifc:HasProperties>
+  </ifc:IfcPropertySet>
+  <ifc:IfcElementQuantity id="i113" GlobalId="uFi8NP9qlJ7keUn6KJxtHU" Name="Qto_WindowBaseQuantities">
+    <ifc:Quantities ifc:itemType="ifc:IfcPhysicalQuantity" ifc:cType="set">
+      <ifc:IfcQuantityLength id="i114" Name="Width" LengthValue="1.2"/>
+      <ifc:IfcQuantityLength id="i115" Name="Height" LengthValue="1.4"/>
+      <ifc:IfcQuantityArea id="i116" Name="Area" AreaValue="1.68"/>
+    </ifc:Quantities>
+  </ifc:IfcElementQuantity>
+  <ifc:IfcRelDefinesByProperties id="i117" GlobalId="zY0$oAMJHYK0ruYnRPVl8T">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWindow" ref="i109"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcPropertySet ref="i110" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelDefinesByProperties id="i118" GlobalId="Q5afV_NtZR4tpeBWCg5hko">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWindow" ref="i109"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcElementQuantity ref="i113" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelContainedInSpatialStructure id="i119" GlobalId="IGL8GFyFFA0spyZyMTr4Wa" Name="Contient_e1">
+    <ifc:RelatedElements ifc:itemType="ifc:IfcProduct" ifc:cType="set">
+      <ifc:IfcWall ref="i71"/>
+      <ifc:IfcWindow ref="i85"/>
+      <ifc:IfcWall ref="i95"/>
+      <ifc:IfcWindow ref="i109"/>
+    </ifc:RelatedElements>
+    <ifc:RelatingStructure xsi:type="ifc:IfcBuildingStorey" ref="i5"/>
+  </ifc:IfcRelContainedInSpatialStructure>
+  
+  <ifc:IfcWall id="i120" GlobalId="RCoZ_WAevoQcEuWFWbfxKj" Name="Mur Nord - Etage 2" Description="Mur exterieur porteur" Tag="M-E2-N"/>
+  <ifc:IfcPropertySet id="i121" GlobalId="qEbDcs3Zrl55WmjNb$cS14" Name="Pset_WallCommon">
+    <ifc:HasProperties ifc:itemType="ifc:IfcProperty" ifc:cType="set">
+      <ifc:IfcPropertySingleValue id="i122" Name="IsExternal">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i123" Name="LoadBearing">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i124" Name="FireRating">
+        <ifc:NominalValue>
+          <ifc:IfcLabel-wrapper>REI 120</ifc:IfcLabel-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i125" Name="Combustible">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>false</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+    </ifc:HasProperties>
+  </ifc:IfcPropertySet>
+  <ifc:IfcElementQuantity id="i126" GlobalId="wo7EUpKhlWW_mA6DvYhD$X" Name="Qto_WallBaseQuantities">
+    <ifc:Quantities ifc:itemType="ifc:IfcPhysicalQuantity" ifc:cType="set">
+      <ifc:IfcQuantityLength id="i127" Name="Length" LengthValue="8.0"/>
+      <ifc:IfcQuantityLength id="i128" Name="Height" LengthValue="3.0"/>
+      <ifc:IfcQuantityLength id="i129" Name="Width" LengthValue="0.25"/>
+      <ifc:IfcQuantityArea id="i130" Name="NetSideArea" AreaValue="24.0"/>
+      <ifc:IfcQuantityVolume id="i131" Name="NetVolume" VolumeValue="6.0"/>
+    </ifc:Quantities>
+  </ifc:IfcElementQuantity>
+  <ifc:IfcRelDefinesByProperties id="i132" GlobalId="En3THhokIVmC1bRqmQ0ZCm">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWall" ref="i120"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcPropertySet ref="i121" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelDefinesByProperties id="i133" GlobalId="ew2yqNuxzEXaziDr_VyLUn">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWall" ref="i120"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcElementQuantity ref="i126" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcWindow id="i134" GlobalId="yxsy6MPE4k42dH288ZodDC" Name="Fenetre Nord - Etage 2" Tag="F-E2-N" OverallHeight="1.4" OverallWidth="1.2" PredefinedType="window"/>
+  <ifc:IfcPropertySet id="i135" GlobalId="I6Pei2oE7$nl$ed3BNzmVV" Name="Pset_WindowCommon">
+    <ifc:HasProperties ifc:itemType="ifc:IfcProperty" ifc:cType="set">
+      <ifc:IfcPropertySingleValue id="i136" Name="IsExternal">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i137" Name="ThermalTransmittance">
+        <ifc:NominalValue>
+          <ifc:IfcReal-wrapper>1.4</ifc:IfcReal-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+    </ifc:HasProperties>
+  </ifc:IfcPropertySet>
+  <ifc:IfcElementQuantity id="i138" GlobalId="7liXqBlaltpRtAGalnlyhI" Name="Qto_WindowBaseQuantities">
+    <ifc:Quantities ifc:itemType="ifc:IfcPhysicalQuantity" ifc:cType="set">
+      <ifc:IfcQuantityLength id="i139" Name="Width" LengthValue="1.2"/>
+      <ifc:IfcQuantityLength id="i140" Name="Height" LengthValue="1.4"/>
+      <ifc:IfcQuantityArea id="i141" Name="Area" AreaValue="1.68"/>
+    </ifc:Quantities>
+  </ifc:IfcElementQuantity>
+  <ifc:IfcRelDefinesByProperties id="i142" GlobalId="B4TkMNOph5$AZalDMA7LNn">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWindow" ref="i134"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcPropertySet ref="i135" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelDefinesByProperties id="i143" GlobalId="MTJl6ZAiyUQr3zwYBinEZ7">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWindow" ref="i134"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcElementQuantity ref="i138" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcWall id="i144" GlobalId="gdYRMKoh5EhOf5usuAo2a8" Name="Mur Sud - Etage 2" Description="Mur exterieur porteur" Tag="M-E2-S"/>
+  <ifc:IfcPropertySet id="i145" GlobalId="1LLtg2GAiTs7epZXDQF985" Name="Pset_WallCommon">
+    <ifc:HasProperties ifc:itemType="ifc:IfcProperty" ifc:cType="set">
+      <ifc:IfcPropertySingleValue id="i146" Name="IsExternal">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i147" Name="LoadBearing">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i148" Name="FireRating">
+        <ifc:NominalValue>
+          <ifc:IfcLabel-wrapper>REI 120</ifc:IfcLabel-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i149" Name="Combustible">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>false</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+    </ifc:HasProperties>
+  </ifc:IfcPropertySet>
+  <ifc:IfcElementQuantity id="i150" GlobalId="94CSlqxJpG2b0S$jEq44WS" Name="Qto_WallBaseQuantities">
+    <ifc:Quantities ifc:itemType="ifc:IfcPhysicalQuantity" ifc:cType="set">
+      <ifc:IfcQuantityLength id="i151" Name="Length" LengthValue="8.0"/>
+      <ifc:IfcQuantityLength id="i152" Name="Height" LengthValue="3.0"/>
+      <ifc:IfcQuantityLength id="i153" Name="Width" LengthValue="0.25"/>
+      <ifc:IfcQuantityArea id="i154" Name="NetSideArea" AreaValue="24.0"/>
+      <ifc:IfcQuantityVolume id="i155" Name="NetVolume" VolumeValue="6.0"/>
+    </ifc:Quantities>
+  </ifc:IfcElementQuantity>
+  <ifc:IfcRelDefinesByProperties id="i156" GlobalId="gooAMXhgXSrthKblhEL3Yc">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWall" ref="i144"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcPropertySet ref="i145" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelDefinesByProperties id="i157" GlobalId="lx36$l1zKU4lFB3GWdkjwd">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWall" ref="i144"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcElementQuantity ref="i150" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcWindow id="i158" GlobalId="mOhNbwgSFobyyQaGZpja2H" Name="Fenetre Sud - Etage 2" Tag="F-E2-S" OverallHeight="1.4" OverallWidth="1.2" PredefinedType="window"/>
+  <ifc:IfcPropertySet id="i159" GlobalId="ycmrLn5gWaa2JmUgzSyeTC" Name="Pset_WindowCommon">
+    <ifc:HasProperties ifc:itemType="ifc:IfcProperty" ifc:cType="set">
+      <ifc:IfcPropertySingleValue id="i160" Name="IsExternal">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i161" Name="ThermalTransmittance">
+        <ifc:NominalValue>
+          <ifc:IfcReal-wrapper>1.4</ifc:IfcReal-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+    </ifc:HasProperties>
+  </ifc:IfcPropertySet>
+  <ifc:IfcElementQuantity id="i162" GlobalId="5OWOALruIF$X2GgyOeHAer" Name="Qto_WindowBaseQuantities">
+    <ifc:Quantities ifc:itemType="ifc:IfcPhysicalQuantity" ifc:cType="set">
+      <ifc:IfcQuantityLength id="i163" Name="Width" LengthValue="1.2"/>
+      <ifc:IfcQuantityLength id="i164" Name="Height" LengthValue="1.4"/>
+      <ifc:IfcQuantityArea id="i165" Name="Area" AreaValue="1.68"/>
+    </ifc:Quantities>
+  </ifc:IfcElementQuantity>
+  <ifc:IfcRelDefinesByProperties id="i166" GlobalId="di9Nyf6UO7UxgWwrDAmJBA">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWindow" ref="i158"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcPropertySet ref="i159" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelDefinesByProperties id="i167" GlobalId="9V3wsiYPC5IJqZfQPI2pgo">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWindow" ref="i158"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcElementQuantity ref="i162" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelContainedInSpatialStructure id="i168" GlobalId="2dwyP93d0GtvpE6Gvf4h9D" Name="Contient_e2">
+    <ifc:RelatedElements ifc:itemType="ifc:IfcProduct" ifc:cType="set">
+      <ifc:IfcWall ref="i120"/>
+      <ifc:IfcWindow ref="i134"/>
+      <ifc:IfcWall ref="i144"/>
+      <ifc:IfcWindow ref="i158"/>
+    </ifc:RelatedElements>
+    <ifc:RelatingStructure xsi:type="ifc:IfcBuildingStorey" ref="i6"/>
+  </ifc:IfcRelContainedInSpatialStructure>
+  
+  <ifc:IfcWall id="i169" GlobalId="B11_oEf3Oudzd0Wyx3RmL$" Name="Mur Nord - Etage 3" Description="Mur exterieur porteur" Tag="M-E3-N"/>
+  <ifc:IfcPropertySet id="i170" GlobalId="X90vphJONvFNZQCOjyPex2" Name="Pset_WallCommon">
+    <ifc:HasProperties ifc:itemType="ifc:IfcProperty" ifc:cType="set">
+      <ifc:IfcPropertySingleValue id="i171" Name="IsExternal">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i172" Name="LoadBearing">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i173" Name="FireRating">
+        <ifc:NominalValue>
+          <ifc:IfcLabel-wrapper>REI 120</ifc:IfcLabel-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i174" Name="Combustible">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>false</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+    </ifc:HasProperties>
+  </ifc:IfcPropertySet>
+  <ifc:IfcElementQuantity id="i175" GlobalId="$2c19Xt4MkgXc2qTPQOmxj" Name="Qto_WallBaseQuantities">
+    <ifc:Quantities ifc:itemType="ifc:IfcPhysicalQuantity" ifc:cType="set">
+      <ifc:IfcQuantityLength id="i176" Name="Length" LengthValue="8.0"/>
+      <ifc:IfcQuantityLength id="i177" Name="Height" LengthValue="3.0"/>
+      <ifc:IfcQuantityLength id="i178" Name="Width" LengthValue="0.25"/>
+      <ifc:IfcQuantityArea id="i179" Name="NetSideArea" AreaValue="24.0"/>
+      <ifc:IfcQuantityVolume id="i180" Name="NetVolume" VolumeValue="6.0"/>
+    </ifc:Quantities>
+  </ifc:IfcElementQuantity>
+  <ifc:IfcRelDefinesByProperties id="i181" GlobalId="aKcZlh9HGTjFkXSSr9oa0q">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWall" ref="i169"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcPropertySet ref="i170" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelDefinesByProperties id="i182" GlobalId="xLfr69LO1uOar0V_d$FL3R">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWall" ref="i169"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcElementQuantity ref="i175" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcWindow id="i183" GlobalId="rAoYFzrJXt7Z1OduhIDdRd" Name="Fenetre Nord - Etage 3" Tag="F-E3-N" OverallHeight="1.4" OverallWidth="1.2" PredefinedType="window"/>
+  <ifc:IfcPropertySet id="i184" GlobalId="0HiEW8bYTNC$L9TZplJBt4" Name="Pset_WindowCommon">
+    <ifc:HasProperties ifc:itemType="ifc:IfcProperty" ifc:cType="set">
+      <ifc:IfcPropertySingleValue id="i185" Name="IsExternal">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i186" Name="ThermalTransmittance">
+        <ifc:NominalValue>
+          <ifc:IfcReal-wrapper>1.4</ifc:IfcReal-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+    </ifc:HasProperties>
+  </ifc:IfcPropertySet>
+  <ifc:IfcElementQuantity id="i187" GlobalId="7rJS6Y87PDYd9e_I5OYKzj" Name="Qto_WindowBaseQuantities">
+    <ifc:Quantities ifc:itemType="ifc:IfcPhysicalQuantity" ifc:cType="set">
+      <ifc:IfcQuantityLength id="i188" Name="Width" LengthValue="1.2"/>
+      <ifc:IfcQuantityLength id="i189" Name="Height" LengthValue="1.4"/>
+      <ifc:IfcQuantityArea id="i190" Name="Area" AreaValue="1.68"/>
+    </ifc:Quantities>
+  </ifc:IfcElementQuantity>
+  <ifc:IfcRelDefinesByProperties id="i191" GlobalId="nkI9OYUltQ3260L1vzJFvc">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWindow" ref="i183"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcPropertySet ref="i184" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelDefinesByProperties id="i192" GlobalId="EPvnCy8dzM1aoM2hgAFMmF">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWindow" ref="i183"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcElementQuantity ref="i187" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcWall id="i193" GlobalId="dWoNPP2beJFsN_H3j1UvfX" Name="Mur Sud - Etage 3" Description="Mur exterieur porteur" Tag="M-E3-S"/>
+  <ifc:IfcPropertySet id="i194" GlobalId="bguxa8tFvxur4Zx_yVMgmT" Name="Pset_WallCommon">
+    <ifc:HasProperties ifc:itemType="ifc:IfcProperty" ifc:cType="set">
+      <ifc:IfcPropertySingleValue id="i195" Name="IsExternal">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i196" Name="LoadBearing">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i197" Name="FireRating">
+        <ifc:NominalValue>
+          <ifc:IfcLabel-wrapper>REI 120</ifc:IfcLabel-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i198" Name="Combustible">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>false</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+    </ifc:HasProperties>
+  </ifc:IfcPropertySet>
+  <ifc:IfcElementQuantity id="i199" GlobalId="wGi_YAqHL0tvXyfZ5M8GN6" Name="Qto_WallBaseQuantities">
+    <ifc:Quantities ifc:itemType="ifc:IfcPhysicalQuantity" ifc:cType="set">
+      <ifc:IfcQuantityLength id="i200" Name="Length" LengthValue="8.0"/>
+      <ifc:IfcQuantityLength id="i201" Name="Height" LengthValue="3.0"/>
+      <ifc:IfcQuantityLength id="i202" Name="Width" LengthValue="0.25"/>
+      <ifc:IfcQuantityArea id="i203" Name="NetSideArea" AreaValue="24.0"/>
+      <ifc:IfcQuantityVolume id="i204" Name="NetVolume" VolumeValue="6.0"/>
+    </ifc:Quantities>
+  </ifc:IfcElementQuantity>
+  <ifc:IfcRelDefinesByProperties id="i205" GlobalId="By19GU8zP7Q$f$thCV3g$s">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWall" ref="i193"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcPropertySet ref="i194" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelDefinesByProperties id="i206" GlobalId="PFjbFGQXHTG2CmJWjNjDwI">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWall" ref="i193"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcElementQuantity ref="i199" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcWindow id="i207" GlobalId="InZg3fPN2Tz6hYtEu2E01g" Name="Fenetre Sud - Etage 3" Tag="F-E3-S" OverallHeight="1.4" OverallWidth="1.2" PredefinedType="window"/>
+  <ifc:IfcPropertySet id="i208" GlobalId="NnKubpv_WNsoEQlETqLO0P" Name="Pset_WindowCommon">
+    <ifc:HasProperties ifc:itemType="ifc:IfcProperty" ifc:cType="set">
+      <ifc:IfcPropertySingleValue id="i209" Name="IsExternal">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i210" Name="ThermalTransmittance">
+        <ifc:NominalValue>
+          <ifc:IfcReal-wrapper>1.4</ifc:IfcReal-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+    </ifc:HasProperties>
+  </ifc:IfcPropertySet>
+  <ifc:IfcElementQuantity id="i211" GlobalId="ufntz_q1peGz4CkPRfzQni" Name="Qto_WindowBaseQuantities">
+    <ifc:Quantities ifc:itemType="ifc:IfcPhysicalQuantity" ifc:cType="set">
+      <ifc:IfcQuantityLength id="i212" Name="Width" LengthValue="1.2"/>
+      <ifc:IfcQuantityLength id="i213" Name="Height" LengthValue="1.4"/>
+      <ifc:IfcQuantityArea id="i214" Name="Area" AreaValue="1.68"/>
+    </ifc:Quantities>
+  </ifc:IfcElementQuantity>
+  <ifc:IfcRelDefinesByProperties id="i215" GlobalId="uUicDiBX_8ekQyVUIzgSUf">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWindow" ref="i207"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcPropertySet ref="i208" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelDefinesByProperties id="i216" GlobalId="t5c3iEbEcjufBCmOuqJA8y">
+    <ifc:RelatedObjects xsi:type="ifc:IfcWindow" ref="i207"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcElementQuantity ref="i211" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRoof id="i217" GlobalId="dkX2xJTrxeCFJWHlURhUJh" Name="Toiture" Description="Toiture terrasse" Tag="R-001" PredefinedType="flat_roof"/>
+  <ifc:IfcPropertySet id="i218" GlobalId="aQSjydlsj0OW_zwmy5YkUP" Name="Pset_RoofCommon">
+    <ifc:HasProperties ifc:itemType="ifc:IfcProperty" ifc:cType="set">
+      <ifc:IfcPropertySingleValue id="i219" Name="IsExternal">
+        <ifc:NominalValue>
+          <ifc:IfcBoolean-wrapper>true</ifc:IfcBoolean-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+      <ifc:IfcPropertySingleValue id="i220" Name="FireRating">
+        <ifc:NominalValue>
+          <ifc:IfcLabel-wrapper>REI 60</ifc:IfcLabel-wrapper>
+        </ifc:NominalValue>
+      </ifc:IfcPropertySingleValue>
+    </ifc:HasProperties>
+  </ifc:IfcPropertySet>
+  <ifc:IfcElementQuantity id="i221" GlobalId="Q$$EOTKB0ClBYOYdZXWoeS" Name="Qto_RoofBaseQuantities">
+    <ifc:Quantities ifc:itemType="ifc:IfcPhysicalQuantity" ifc:cType="set">
+      <ifc:IfcQuantityArea id="i222" Name="GrossArea" AreaValue="85.0"/>
+      <ifc:IfcQuantityArea id="i223" Name="NetArea" AreaValue="80.0"/>
+    </ifc:Quantities>
+  </ifc:IfcElementQuantity>
+  <ifc:IfcRelDefinesByProperties id="i224" GlobalId="3Eta$0N1Vm8aGKdn1nZdHM">
+    <ifc:RelatedObjects xsi:type="ifc:IfcRoof" ref="i217"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcPropertySet ref="i218" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelDefinesByProperties id="i225" GlobalId="PbM2zWcIdL35eKZ5oez6v5">
+    <ifc:RelatedObjects xsi:type="ifc:IfcRoof" ref="i217"/>
+    <ifc:RelatingPropertyDefinition>
+      <ifc:IfcElementQuantity ref="i221" xsi:nil="true"/>
+    </ifc:RelatingPropertyDefinition>
+  </ifc:IfcRelDefinesByProperties>
+  <ifc:IfcRelContainedInSpatialStructure id="i226" GlobalId="NiTGeSavQ7tKroaUj2PIFB" Name="Contient_e3">
+    <ifc:RelatedElements ifc:itemType="ifc:IfcProduct" ifc:cType="set">
+      <ifc:IfcWall ref="i169"/>
+      <ifc:IfcWindow ref="i183"/>
+      <ifc:IfcWall ref="i193"/>
+      <ifc:IfcWindow ref="i207"/>
+      <ifc:IfcRoof ref="i217"/>
+    </ifc:RelatedElements>
+    <ifc:RelatingStructure xsi:type="ifc:IfcBuildingStorey" ref="i7"/>
+  </ifc:IfcRelContainedInSpatialStructure>
+  
+</ifcXML>

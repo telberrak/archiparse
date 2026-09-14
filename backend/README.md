@@ -87,8 +87,7 @@ backend/
 │   │   ├── __init__.py
 │   │   ├── upload_service.py       # Gestion des uploads de fichiers
 │   │   ├── validation_service.py   # Validation XSD
-│   │   ├── parser_service.py       # Parseur IFCXML en streaming
-│   │   ├── xslt_service.py         # Transformation XSLT
+│   │   ├── parser_service.py       # Parseur IFCXML en streaming (résout aussi Psets/Qtos)
 │   │   ├── quota_service.py        # Gestion des quotas
 │   │   └── audit_service.py        # Logs d'audit
 │   │
@@ -119,8 +118,7 @@ backend/
 ├── tests/
 │   ├── __init__.py
 │   ├── test_validation.py
-│   ├── test_parser.py
-│   └── test_xslt.py
+│   └── test_parser.py
 │
 ├── requirements.txt
 ├── Dockerfile
@@ -166,7 +164,6 @@ Traitement de tâches en arrière-plan utilisant Celery ou RQ.
 - pydantic
 - pydantic[email]
 - lxml (parsing XML)
-- saxonche (XSLT 2.0+)
 - python-jose[cryptography] (JWT)
 - passlib[bcrypt] (hachage de mots de passe)
 

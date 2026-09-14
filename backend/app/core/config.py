@@ -69,7 +69,18 @@ class Settings(BaseSettings):
     
     # Locataire par défaut (pour développement)
     DEFAULT_TENANT_ID: Optional[str] = None
-    
+
+    # URL du frontend (pour les liens dans les e-mails, ex: réinitialisation de mot de passe)
+    FRONTEND_URL: str = "http://localhost:3000"
+
+    # SMTP (envoi d'e-mails — mot de passe oublié)
+    SMTP_HOST: str = "smtp.gmail.com"
+    SMTP_PORT: int = 587
+    SMTP_USERNAME: str = ""
+    SMTP_PASSWORD: str = ""
+    SMTP_FROM_EMAIL: str = ""
+    SMTP_USE_TLS: bool = True
+
     class Config:
         env_file = ".env"
         case_sensitive = True

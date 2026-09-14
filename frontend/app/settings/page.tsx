@@ -1,8 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { TenantLogoCard } from '@/components/settings/TenantLogoCard';
+import { TenantInfoCard } from '@/components/settings/TenantInfoCard';
+import { QuotaUsageCard } from '@/components/settings/QuotaUsageCard';
 import { api } from '@/lib/api';
 
 interface User {
@@ -15,13 +18,22 @@ interface User {
 }
 
 export default function SettingsPage() {
-  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
   const [fullName, setFullName] = useState('');
+  const [savingName, setSavingName] = useState(false);
+
+  const [changingPassword, setChangingPassword] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [savingPassword, setSavingPassword] = useState(false);
+
+  const [loggingOut, setLoggingOut] = useState(false);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -29,7 +41,7 @@ export default function SettingsPage() {
         // Wait for auth to be ready
         const { waitForAuth } = await import('@/components/TenantInitializer');
         await waitForAuth();
-        
+
         const userData = await api.getCurrentUser();
         setUser(userData);
         setFullName(userData.full_name || '');
@@ -42,6 +54,52 @@ export default function SettingsPage() {
     loadUser();
   }, []);
 
+  const handleSaveName = async () => {
+    setSavingName(true);
+    setError(null);
+    try {
+      const updated = await api.updateCurrentUser(fullName.trim());
+      setUser(updated);
+      setFullName(updated.full_name || '');
+      setSuccess('Nom mis à jour avec succès');
+      setEditing(false);
+    } catch (err: any) {
+      setError(err?.message || 'Erreur lors de la mise à jour du nom');
+    } finally {
+      setSavingName(false);
+    }
+  };
+
+  const handleChangePassword = async () => {
+    setPasswordError(null);
+    if (newPassword.length < 8) {
+      setPasswordError('Le nouveau mot de passe doit contenir au moins 8 caractères');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordError('Les mots de passe ne correspondent pas');
+      return;
+    }
+    setSavingPassword(true);
+    try {
+      await api.changePassword(currentPassword, newPassword);
+      setSuccess('Mot de passe changé avec succès');
+      setChangingPassword(false);
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+    } catch (err: any) {
+      setPasswordError(err?.message || 'Erreur lors du changement de mot de passe');
+    } finally {
+      setSavingPassword(false);
+    }
+  };
+
+  const handleLogout = () => {
+    setLoggingOut(true);
+    api.logout();
+    window.location.href = '/login';
+  };
 
   if (loading) {
     return (
@@ -56,7 +114,7 @@ export default function SettingsPage() {
 
   if (!user) {
     return (
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-2xl">
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
           {error || 'Utilisateur non trouvé'}
         </div>
@@ -65,9 +123,9 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="max-w-4xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-foreground">Paramètres</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-primary">Paramètres</h1>
         <p className="mt-2 text-muted-foreground">
           Gérez vos préférences et informations de compte
         </p>
@@ -121,15 +179,8 @@ export default function SettingsPage() {
                     placeholder="Votre nom complet"
                   />
                   <div className="flex gap-2">
-                    <Button
-                      onClick={async () => {
-                        // TODO: Implement update user API endpoint
-                        setSuccess('Nom mis à jour avec succès');
-                        setEditing(false);
-                      }}
-                      size="sm"
-                    >
-                      Enregistrer
+                    <Button onClick={handleSaveName} size="sm" disabled={savingName}>
+                      {savingName ? 'Enregistrement…' : 'Enregistrer'}
                     </Button>
                     <Button
                       onClick={() => {
@@ -187,6 +238,12 @@ export default function SettingsPage() {
           </div>
         </div>
 
+        <TenantInfoCard />
+
+        <TenantLogoCard />
+
+        <QuotaUsageCard />
+
         {/* Sécurité */}
         <div className="bg-background border border-border rounded-lg p-6 shadow-sm">
           <h2 className="text-xl font-semibold text-foreground mb-4">
@@ -197,12 +254,56 @@ export default function SettingsPage() {
               <label className="block text-sm font-medium text-foreground mb-1">
                 Mot de passe
               </label>
-              <p className="text-sm text-muted-foreground mb-2">
-                Changez votre mot de passe pour sécuriser votre compte
-              </p>
-              <Button variant="outline" size="sm">
-                Changer le mot de passe
-              </Button>
+              {changingPassword ? (
+                <div className="space-y-2 max-w-sm">
+                  <Input
+                    type="password"
+                    placeholder="Mot de passe actuel"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                  />
+                  <Input
+                    type="password"
+                    placeholder="Nouveau mot de passe (8 caractères min.)"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                  />
+                  <Input
+                    type="password"
+                    placeholder="Confirmer le nouveau mot de passe"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                  {passwordError && <p className="text-sm text-red-600">{passwordError}</p>}
+                  <div className="flex gap-2">
+                    <Button onClick={handleChangePassword} size="sm" disabled={savingPassword}>
+                      {savingPassword ? 'Enregistrement…' : 'Enregistrer'}
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setChangingPassword(false);
+                        setCurrentPassword('');
+                        setNewPassword('');
+                        setConfirmPassword('');
+                        setPasswordError(null);
+                      }}
+                      variant="outline"
+                      size="sm"
+                    >
+                      Annuler
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    Changez votre mot de passe pour sécuriser votre compte
+                  </p>
+                  <Button variant="outline" size="sm" onClick={() => setChangingPassword(true)}>
+                    Changer le mot de passe
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -217,6 +318,9 @@ export default function SettingsPage() {
               <p className="text-sm text-muted-foreground mb-4">
                 Déconnectez-vous de votre compte. Vous devrez vous reconnecter pour accéder à nouveau.
               </p>
+              <Button variant="outline" size="sm" onClick={handleLogout} disabled={loggingOut}>
+                {loggingOut ? 'Déconnexion…' : 'Se déconnecter'}
+              </Button>
             </div>
           </div>
         </div>
@@ -241,4 +345,3 @@ export default function SettingsPage() {
     </div>
   );
 }
-

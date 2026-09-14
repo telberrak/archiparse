@@ -1,7 +1,7 @@
 """
 Service de validation XSD
 
-Valide les fichiers IFCXML contre les schémas XSD officiels en streaming.
+Valide les fichiers IFCXML contre les schémas XSD officiels.
 """
 
 from pathlib import Path
@@ -107,50 +107,33 @@ class ValidationService:
                 )
         
         schema = self._schemas[ifc_version]
-        
-        # Valider en streaming
+
+        # Valider le document complet contre le schéma XSD.
+        #
+        # Note : la validation XSD est intrinsèquement une propriété de tout
+        # le document (un élément ne peut être validé isolément que s'il a sa
+        # propre déclaration globale, ce qui n'est vrai que de la racine).
+        # Une version précédente appelait schema.assertValid(elem) sur CHAQUE
+        # élément pendant un iterparse en streaming, ce qui rejetait à tort
+        # tout fichier réel : des éléments comme <header>, <RelatingObject>
+        # ou <Quantities> ne sont valides qu'en tant que descendants de la
+        # racine, jamais en tant que "racine" isolée, donc l'appel échouait
+        # systématiquement avec "No matching global declaration available for
+        # the validation root" même sur un fichier parfaitement conforme.
+        # On parse donc le document entier puis on le valide une seule fois.
         try:
-            # Parser en streaming pour validation
-            context = etree.iterparse(
-                str(xml_file_path),
-                events=("end",),
-                huge_tree=True
-            )
-            
-            for event, elem in context:
-                # Valider l'élément
-                try:
-                    schema.assertValid(elem)
-                except etree.DocumentInvalid as e:
-                    # Extraire les erreurs de validation
-                    error_log = schema.error_log
-                    for error in error_log:
-                        errors.append(ValidationError(
-                            line=error.line,
-                            column=error.column,
-                            message=error.message,
-                            element=elem.tag if elem is not None else None
-                        ))
-                
-                # Nettoyer pour libérer la mémoire
-                elem.clear()
-                while elem.getprevious() is not None:
-                    del elem.getparent()[0]
-            
-            # Valider le document complet
-            try:
-                doc = etree.parse(str(xml_file_path))
-                schema.assertValid(doc)
-            except etree.DocumentInvalid:
-                # Les erreurs ont déjà été collectées ci-dessus
-                pass
-            except Exception as e:
-                errors.append(ValidationError(
-                    line=0,
-                    column=0,
-                    message=f"Erreur lors de la validation: {str(e)}"
-                ))
-        
+            parser = etree.XMLParser(huge_tree=True)
+            doc = etree.parse(str(xml_file_path), parser=parser)
+
+            if not schema.validate(doc):
+                for error in schema.error_log:
+                    errors.append(ValidationError(
+                        line=error.line,
+                        column=error.column,
+                        message=error.message,
+                        element=error.path
+                    ))
+
         except etree.XMLSyntaxError as e:
             errors.append(ValidationError(
                 line=e.lineno if hasattr(e, 'lineno') else 0,

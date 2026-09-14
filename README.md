@@ -40,6 +40,7 @@ npm run dev
 ## 📖 Documentation
 
 - [ARCHITECTURE.md](./ARCHITECTURE.md) - Architecture système
+- [EXPLORER.md](./EXPLORER.md) - Explorateur d'éléments IFC
 - [DATABASE_SCHEMA.md](./DATABASE_SCHEMA.md) - Schéma de base de données
 - [backend/DEPLOYMENT.md](./backend/DEPLOYMENT.md) - Guide de déploiement backend
 - [PROJET_COMPLET.md](./PROJET_COMPLET.md) - Vue d'ensemble complète
@@ -59,10 +60,6 @@ archiparse/
 │   ├── app/             # Pages Next.js
 │   ├── components/      # Composants React
 │   └── lib/             # Utilitaires et hooks
-│
-├── xslt/                # Transformations XSLT
-│   ├── modules/         # Modules réutilisables
-│   └── templates/       # Templates principaux
 │
 ├── xsd/                 # Schémas XSD
 │   ├── IFC2X3.xsd
@@ -94,8 +91,8 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 - ✅ Upload de fichiers IFCXML (drag-and-drop)
 - ✅ Validation XSD automatique (IFC2X3 et IFC4)
 - ✅ Parsing en streaming (support fichiers volumineux)
-- ✅ Transformation XSLT vers JSON normalisé
-- ✅ Exploration hiérarchique (Project → Site → Building → Storey → Space)
+- ✅ Résolution complète des Psets/Qtos (valeurs réelles, pas des références)
+- ✅ Explorateur d'éléments (liste par type, étage, Psets, quantités)
 - ✅ Recherche et filtrage des éléments
 - ✅ Authentification JWT
 - ✅ Multi-tenant avec isolation complète
@@ -104,9 +101,9 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 
 ## 🛠️ Technologies
 
-- **Backend**: FastAPI, PostgreSQL, Celery, Saxon-HE
+- **Backend**: FastAPI, PostgreSQL, Celery
 - **Frontend**: Next.js 14+, React, TypeScript
-- **XML**: lxml (streaming), XSLT 2.0+
+- **XML**: lxml (streaming)
 - **Base de données**: PostgreSQL 14+ avec JSONB
 
 ## 📝 Points d'Extrémité API
@@ -134,6 +131,7 @@ Documentation interactive: http://localhost:8000/docs
 - [Déploiement Backend](./backend/DEPLOYMENT.md)
 - [Démarrage Rapide](./DEPLOYMENT_QUICKSTART.md)
 - [Architecture](./ARCHITECTURE.md)
+- [Explorateur IFC](./EXPLORER.md)
 - [Schéma Base de Données](./DATABASE_SCHEMA.md)
 
 ## 🎯 Prochaines Étapes

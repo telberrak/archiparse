@@ -106,6 +106,10 @@ class ModelResponse(BaseModel):
     project_guid: Optional[UUID] = None
     statistics: Optional[Dict[str, Any]] = None
     created_at: datetime
-    
+    project_id: Optional[UUID] = None
+    project_name: Optional[str] = None
+    client_id: Optional[UUID] = None
+    client_name: Optional[str] = None
+
     model_config = {"from_attributes": True}
 

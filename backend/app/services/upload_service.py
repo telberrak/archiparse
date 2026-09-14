@@ -78,29 +78,32 @@ class UploadService:
         tenant_id: UUID,
         filename: str,
         file_size: int,
-        file_path: Path
+        file_path: Path,
+        project_id: UUID = None
     ) -> Job:
         """
         Crée un enregistrement de tâche dans la base de données.
-        
+
         Args:
             db: Session de base de données
             tenant_id: ID du locataire
             filename: Nom du fichier
             file_size: Taille du fichier en octets
             file_path: Chemin vers le fichier sauvegardé
-            
+            project_id: ID du projet auquel rattacher le modèle une fois parsé
+
         Returns:
             Job: Enregistrement de tâche créé
         """
         job = Job(
             tenant_id=tenant_id,
+            project_id=project_id,
             filename=filename,
             file_size=file_size,
             file_path=str(file_path),
             status=JobStatus.EN_ATTENTE
         )
-        
+
         db.add(job)
         db.commit()
         db.refresh(job)
